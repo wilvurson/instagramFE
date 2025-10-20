@@ -5,7 +5,7 @@ import { redirect } from "next/navigation";
 import { Navbar } from "./components/Navbar";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
-import { Heart, SquarePlus, MessageCircle, Send, SaveIcon} from "lucide-react";
+import { Heart, SquarePlus, MessageCircle, Send, Bookmark} from "lucide-react";
 
 dayjs.extend(relativeTime);
 
@@ -71,10 +71,11 @@ export default function Home() {
               <Send />
             </span>
             <span className="">
-              < SaveIcon/>
+              < Bookmark/>
             </span>
             </div>
-            <p className="mt-2 text-gray-800">{post.description}</p>
+            <p className="mt-2 text-white">{post.description}</p>
+            <input className="focus:outline-none" placeholder="Add a comment..."></input>
           </div>
         ))}
       </div>
