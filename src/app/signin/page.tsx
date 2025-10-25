@@ -20,7 +20,7 @@ const SingInPage = () => {
   }
 
   const handleSignin = async () => {
-    const response = await fetch("http://localhost:5500/signin", {
+    const response = await fetch("https://instagram-be-pink.vercel.app/signin", {
       headers: {
         "Content-Type": "application/json",
       },
