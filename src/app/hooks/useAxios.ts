@@ -5,7 +5,7 @@ export const useAxios = () => {
   const { token } = useUser();
 
   const axios = realAxios.create({
-    baseURL: "https://instagram-be-pink.vercel.app",
+    baseURL: "https://instagram-be-seven.vercel.app",
     headers: {
       Authorization: "Bearer " + token,
     },
