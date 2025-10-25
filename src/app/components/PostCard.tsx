@@ -13,6 +13,10 @@ export const PostCard = ({ post }: { post: Post }) => {
   const [isLiked, setIsLiked] = useState(false);
   const [likeCount, setLikeCount] = useState(post.likes.length);
   const [totalComments, setTotalComments] = useState(3);
+  const [showAllComments, setShowAllComments] = useState(false);
+  const [isShared, setIsShared] = useState(false);
+  const [shareCount, setShareCount] = useState(post.shares.length);
+  const [bookmarked, setBookmarked] = useState(false);
 
   const axios = useAxios();
 
@@ -25,6 +29,7 @@ export const PostCard = ({ post }: { post: Post }) => {
     if (user) {
       const userId = user._id;
       setIsLiked(post.likes.some((like) => like.createdBy._id === userId));
+      setIsShared(post.shares.some((share) => share.createdBy._id === userId))
     }
   }, [user]);
 
@@ -40,70 +45,187 @@ export const PostCard = ({ post }: { post: Post }) => {
   };
 
   return (
-    <div key={post._id} className="mb-4 border-b py-4">
-      <div className="flex gap-x-1">
-        <Link href={`/${post.createdBy.username}`}>
-          <div className="font-bold">{post.createdBy.username}</div>
-        </Link>
-        <div className="opacity-50">•</div>
-        <div className="opacity-50">{dayjs(post.createdAt).fromNow()}</div>
-      </div>
-      <img src={post.imageUrl} alt="" className="rounded-xl"/>
-      <div className="flex h-10 items-center mt-2">
-        <div
-          className="hover:opacity-60 cursor-pointer"
-          onClick={async () => {
-            const response = await axios.post(`/posts/${post._id}/like`);
-            setIsLiked(response.data.isLiked);
-
-            if (response.data.isLiked) {
-              setLikeCount(likeCount + 1);
-            } else {
-              setLikeCount(likeCount - 1);
-            }
-          }}
-        >
-          {isLiked ? <Heart fill="red" stroke="red" /> : <Heart />}
-        </div>
-        <div className="ml-4 hover:opacity-60 cursor-pointer">
-          <MessageCircle />
-        </div>
-        <div className="ml-4 hover:opacity-60 cursor-pointer">
-          <Send />
-        </div>
-        <div className="ml-auto hover:opacity-60 cursor-pointer">
-          <Bookmark />
-        </div>
-      </div>
-      <div>{likeCount} likes</div>
+    <div key={post._id} className="mb-8 text-white">
+  {/* Header */}
+  <div className="flex items-center justify-between px-4 py-3">
+    <div className="flex items-center gap-2 text-sm text-gray-300">
       <Link href={`/${post.createdBy.username}`}>
-        <b>{post.createdBy.username}</b>
-      </Link>{" "}
-      {post.description}
-      {comments.slice(0, totalComments).map((comment) => (
-        <div key={comment._id}>
-          <b>{comment.createdBy.username}: </b>
-          {comment.text}
-        </div>
-      ))}
-      {comments.length > 3 && (
-        <div
-          onClick={() => {
-            setTotalComments(100);
-          }}
-          className="hover:underline cursor-pointer"
+        <div className="font-semibold hover:underline">{post.createdBy.username}</div>
+      </Link>
+      <div className="text-gray-500">•</div>
+      <div className="text-gray-500">{dayjs(post.createdAt).fromNow()}</div>
+    </div>
+  </div>
+
+  {/* Post Image */}
+  <div className="w-full bg-black flex justify-center">
+    {post.imageUrl ? (
+      <img
+        src={post.imageUrl}
+        alt="Post image"
+        className="w-full max-h-[600px] object-contain bg-black"
+      />
+    ) : (
+      <div className="text-gray-500 p-4">No image available</div>
+    )}
+  </div>
+
+  {/* Action Buttons */}
+  <div className="flex items-center px-4 py-2">
+    <div
+      className="hover:opacity-70 cursor-pointer transition-transform active:scale-90"
+      onClick={async () => {
+        const response = await axios.post(`/posts/${post._id}/like`);
+        setIsLiked(response.data.isLiked);
+        setLikeCount(likeCount + (response.data.isLiked ? 1 : -1));
+      }}
+    >
+      {isLiked ? <Heart fill="red" stroke="red" /> : <Heart stroke="white" />}
+    </div>
+
+    <div
+      className="ml-4 hover:opacity-70 cursor-pointer transition-transform active:scale-90"
+      onClick={() => setShowAllComments(true)}
+    >
+      <MessageCircle stroke="white" />
+    </div>
+
+    <div
+      className="ml-4 hover:opacity-70 cursor-pointer transition-transform active:scale-90"
+      onClick={async () => {
+        const response = await axios.post(`/posts/${post._id}/share`);
+        setIsShared(response.data.isShared);
+        setShareCount(shareCount + (response.data.isShared ? 1 : -1));
+      }}
+    >
+      {isShared ? <Send fill="yellow" stroke="yellow" /> : <Send stroke="white" />}
+    </div>
+
+    <div className="ml-auto hover:opacity-70 cursor-pointer transition-transform active:scale-90">
+      <Bookmark
+      stroke={bookmarked ? "none" : "white"}  
+      fill={bookmarked ? "white" : "none"}  
+      onClick={() => setBookmarked(!bookmarked)}
+      style={{ cursor: "pointer" }}
+      size={24}
+    />
+    </div>
+  </div>
+
+  {/* Stats Line */}
+  <div className="px-4 text-sm text-gray-300">
+    <div className="flex gap-4 font-medium">
+      <span>{likeCount} likes</span>
+      <span>{comments.length} comments</span>
+      <span>{shareCount ?? 0} shares</span>
+    </div>
+  </div>
+
+  {/* Caption */}
+  <div className="px-4 text-sm mt-1 text-gray-300">
+    <Link href={`/${post.createdBy.username}`}>
+      <b>{post.createdBy.username}</b>
+    </Link>{" "}
+    {post.description || "No description"}
+  </div>
+
+  {/* Comments Preview */}
+<div className="px-4 mt-2 space-y-1 text-sm text-gray-300">
+  {comments.slice(0, totalComments).map((comment) => (
+    <div key={comment._id}>
+      <b>{comment.createdBy.username}: </b>
+      {comment.text}
+    </div>
+  ))}
+
+  {/* Inline "View all comments" */}
+  {comments.length > totalComments && !showAllComments && (
+    <div
+      onClick={() => setShowAllComments(true)}
+      className="text-gray-500 text-sm hover:underline cursor-pointer"
+    >
+      View all {comments.length} comments
+    </div>
+  )}
+</div>
+
+{/* Comments Overlay */}
+{showAllComments && (
+  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/90">
+    <div className="bg-black w-11/12 max-w-lg max-h-[80vh] overflow-y-auto rounded-lg p-4 border border-gray-700">
+      {/* Header */}
+      <div className="flex justify-between items-center mb-4">
+        <h2 className="text-white font-semibold">All Comments</h2>
+        <button
+          className="text-gray-400 hover:text-white"
+          onClick={() => setShowAllComments(false)}
         >
-          View all comments
-        </div>
-      )}
-      <div className="relative">
-        <textarea value={text} onChange={(e) => setText(e.target.value)} placeholder="Add a comment" className="w-full resize-none focus:outline-none" rows={1} />
-        {text.length > 0 && (
-          <div onClick={handleSubmitComment} className="absolute hover:underline cursor-pointer right-0 top-0 font-bold focus:outline-none">
-            Post
+          Close
+        </button>
+      </div>
+
+      {/* Comments */}
+      <div className="space-y-3 text-gray-300 text-sm">
+        {comments.map((comment) => (
+          <div key={comment._id}>
+            <b>{comment.createdBy.username}: </b>
+            {comment.text}
           </div>
-        )}
+        ))}
       </div>
     </div>
+  </div>
+)}
+
+
+  {/* Comment Input */}
+  <div className="flex items-center border-t border-gray-800 mt-3 px-4 py-3">
+    <textarea
+      value={text}
+      onChange={(e) => setText(e.target.value)}
+      placeholder="Add a comment..."
+      className="flex-1 resize-none text-sm bg-black text-white placeholder-gray-500 focus:outline-none"
+      rows={1}
+    />
+    {text.length > 0 && (
+      <div
+        onClick={handleSubmitComment}
+        className="text-blue-500 font-semibold text-sm cursor-pointer hover:text-blue-600"
+      >
+        Post
+      </div>
+    )}
+  </div>
+
+  {/* Comments Overlay */}
+  {showAllComments && (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#ffffff04]">
+      <div className="w-11/12 max-w-lg max-h-[80vh] overflow-y-auto rounded-lg p-4 border border-gray-700">
+        {/* Header */}
+        <div className="flex justify-between items-center mb-4">
+          <h2 className="text-white font-semibold">All Comments</h2>
+          <button
+            className="text-gray-400 hover:text-white"
+            onClick={() => setShowAllComments(false)}
+          >
+            Close
+          </button>
+        </div>
+
+        {/* Comments */}
+        <div className="space-y-3 text-gray-300 text-sm">
+          {comments.map((comment) => (
+            <div key={comment._id}>
+              <b>{comment.createdBy.username}: </b>
+              {comment.text}
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  )}
+</div>
+
   );
 };
+

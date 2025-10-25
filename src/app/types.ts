@@ -21,6 +21,12 @@ export type PostLike = {
   createdBy: User;
 };
 
+export type PostShare = {
+  _id: string;
+  createdAt: string;
+  createdBy: User;
+};
+
 export type Post = {
   _id: string;
   imageUrl: string;
@@ -29,4 +35,5 @@ export type Post = {
   createdBy: User;
   comments: PostComment[];
   likes: PostLike[];
+  shares: PostShare[];
 };
