@@ -20,7 +20,7 @@ const SingInPage = () => {
   }
 
   const handleSignin = async () => {
-    const response = await fetch("https://instagram-be-pink.vercel.app/signin", {
+    const response = await fetch("https://instagram-be-seven.vercel.app/signin", {
       headers: {
         "Content-Type": "application/json",
       },
