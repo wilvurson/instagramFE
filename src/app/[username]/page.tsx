@@ -1,12 +1,13 @@
 "use client";
 
 import { useParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { useAxios } from "../hooks/useAxios";
 import { User } from "../types";
 import { Button } from "@/components/ui/button";
 import { MoreHorizontal, Grid, UserSquare2, Check } from "lucide-react";
 import { Navbar } from "../components/Navbar";
+import { useUser } from "../providers/UserProvider";
 
 const ProfilePage = () => {
   const { username } = useParams();
@@ -14,13 +15,14 @@ const ProfilePage = () => {
   const [isNotFound, setIsNotFound] = useState(false);
   const [loading, setLoading] = useState(true);
   const axios = useAxios();
+  const {user : currentUser} = useUser();
 
   useEffect(() => {
     axios
       .get(`/users/${username}`)
       .then((res) => setUser(res.data))
       .catch((err) => {
-        if (err?.response?.status === 404) setIsNotFound(true);
+        if (err.response.status === 404) setIsNotFound(true);
       })
       .finally(() => setLoading(false));
   }, [username]);
@@ -35,14 +37,16 @@ const ProfilePage = () => {
       </div>
     );
 
+  const isOwnProfile = currentUser?.username === user?.username
+
   return (
     
     <div className="min-h-screen bg-black text-white w-full">
       < Navbar/>
       <div className="w-full flex justify-center pt-10 px-4">
-        {/* Header */}
+
         <div className="flex flex-col md:flex-row md:items-center md:gap-10 mb-8">
-          {/* Profile picture */}
+
           <div className="flex justify-center md:block mb-6 md:mb-0">
             <img
               src={"/default-avatar.png"}
@@ -65,7 +69,6 @@ const ProfilePage = () => {
               </button>
             </div>
 
-            {/* Stats */}
             <div className="flex justify-center md:justify-start gap-8 mb-4 text-sm">
               <span>
                 0 posts
@@ -78,9 +81,9 @@ const ProfilePage = () => {
               </span>
             </div>
 
-            {/* Bio */}
+
             <div className="text-sm leading-snug mb-4">
-              <span className="font-semibold block">{user?.fullname || "User"}</span>
+              <span className="font-semibold block">{user?.fullname}</span>
               <p className="text-gray-300">{"No bio yet."}</p>
               
             </div>

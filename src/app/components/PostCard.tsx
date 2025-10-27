@@ -46,7 +46,7 @@ export const PostCard = ({ post }: { post: Post }) => {
 
   return (
     <div key={post._id} className="mb-8 text-white">
-  {/* Header */}
+
   <div className="flex items-center justify-between px-4 py-3">
     <div className="flex items-center gap-2 text-sm text-gray-300">
       <Link href={`/${post.createdBy.username}`}>
@@ -57,7 +57,6 @@ export const PostCard = ({ post }: { post: Post }) => {
     </div>
   </div>
 
-  {/* Post Image */}
   <div className="w-full bg-black flex justify-center">
     {post.imageUrl ? (
       <img
@@ -70,7 +69,7 @@ export const PostCard = ({ post }: { post: Post }) => {
     )}
   </div>
 
-  {/* Action Buttons */}
+
   <div className="flex items-center px-4 py-2">
     <div
       className="hover:opacity-70 cursor-pointer transition-transform active:scale-90"
@@ -112,7 +111,6 @@ export const PostCard = ({ post }: { post: Post }) => {
     </div>
   </div>
 
-  {/* Stats Line */}
   <div className="px-4 text-sm text-gray-300">
     <div className="flex gap-4 font-medium">
       <span>{likeCount} likes</span>
@@ -121,7 +119,6 @@ export const PostCard = ({ post }: { post: Post }) => {
     </div>
   </div>
 
-  {/* Caption */}
   <div className="px-4 text-sm mt-1 text-gray-300">
     <Link href={`/${post.createdBy.username}`}>
       <b>{post.createdBy.username}</b>
@@ -129,7 +126,6 @@ export const PostCard = ({ post }: { post: Post }) => {
     {post.description || "No description"}
   </div>
 
-  {/* Comments Preview */}
 <div className="px-4 mt-2 space-y-1 text-sm text-gray-300">
   {comments.slice(0, totalComments).map((comment) => (
     <div key={comment._id}>
@@ -138,7 +134,6 @@ export const PostCard = ({ post }: { post: Post }) => {
     </div>
   ))}
 
-  {/* Inline "View all comments" */}
   {comments.length > totalComments && !showAllComments && (
     <div
       onClick={() => setShowAllComments(true)}
@@ -149,11 +144,10 @@ export const PostCard = ({ post }: { post: Post }) => {
   )}
 </div>
 
-{/* Comments Overlay */}
 {showAllComments && (
   <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/90">
     <div className="bg-black w-11/12 max-w-lg max-h-[80vh] overflow-y-auto rounded-lg p-4 border border-gray-700">
-      {/* Header */}
+
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-white font-semibold">All Comments</h2>
         <button
@@ -164,7 +158,6 @@ export const PostCard = ({ post }: { post: Post }) => {
         </button>
       </div>
 
-      {/* Comments */}
       <div className="space-y-3 text-gray-300 text-sm">
         {comments.map((comment) => (
           <div key={comment._id}>
@@ -177,8 +170,6 @@ export const PostCard = ({ post }: { post: Post }) => {
   </div>
 )}
 
-
-  {/* Comment Input */}
   <div className="flex items-center border-t border-gray-800 mt-3 px-4 py-3">
     <textarea
       value={text}
@@ -197,11 +188,10 @@ export const PostCard = ({ post }: { post: Post }) => {
     )}
   </div>
 
-  {/* Comments Overlay */}
   {showAllComments && (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#ffffff04]">
       <div className="w-11/12 max-w-lg max-h-[80vh] overflow-y-auto rounded-lg p-4 border border-gray-700">
-        {/* Header */}
+
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-white font-semibold">All Comments</h2>
           <button
@@ -212,7 +202,6 @@ export const PostCard = ({ post }: { post: Post }) => {
           </button>
         </div>
 
-        {/* Comments */}
         <div className="space-y-3 text-gray-300 text-sm">
           {comments.map((comment) => (
             <div key={comment._id}>
