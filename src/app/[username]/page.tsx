@@ -110,7 +110,6 @@ const ProfilePage = () => {
         </div>
       </div>
 
-      {/* --- Buttons --- */}
       <div className="flex justify-center gap-2 mb-6">
         {isOwnProfile ? (
           <Button className="bg-[#262626] text-white text-sm font-semibold w-40 h-10 hover:bg-[#363636]">
