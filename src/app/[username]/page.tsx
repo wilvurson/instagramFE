@@ -26,17 +26,15 @@ const ProfilePage = () => {
 
     const fetchProfile = async () => {
       try {
-        // fetch user info
+
         const userRes = await axios.get(`/users/${username}`);
         setUser(userRes.data);
 
-        // check follow state
         const follows = userRes.data.followers?.some(
           (f: any) => f.createdBy._id === currentUser?._id
         );
         setIsFollowing(follows);
 
-        // fetch user's posts
         const postRes = await axios.get(`/posts/user/${username}`);
         setPosts(postRes.data);
       } catch (err: any) {
@@ -78,10 +76,9 @@ const ProfilePage = () => {
     <div className="min-h-screen bg-black text-white w-full">
       <Navbar />
 
-      {/* --- Profile Header --- */}
       <div className="w-full flex justify-center pt-10 px-4">
         <div className="flex flex-col md:flex-row md:items-center md:gap-10 mb-8">
-          {/* Profile Picture */}
+
           <div className="flex justify-center md:block mb-6 md:mb-0">
             <img
               src={"/default-avatar.png"}
@@ -90,7 +87,6 @@ const ProfilePage = () => {
             />
           </div>
 
-          {/* Info */}
           <div className="flex-1 text-center md:text-left">
             <div className="flex items-center justify-center md:justify-start gap-2 mb-4">
               <h1 className="text-2xl font-semibold">{user?.username}</h1>

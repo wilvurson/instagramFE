@@ -16,7 +16,7 @@ import {
 import { useUser } from "../providers/UserProvider";
 
 export const Navbar = () => {
-  const { user } = useUser(); // get current logged-in user
+  const { user } = useUser();
 
   return (
     <div className="fixed left-0 top-0 h-full w-[80px] bg-black border-r border-neutral-800 flex flex-col justify-between items-center py-4 text-white">
@@ -25,7 +25,6 @@ export const Navbar = () => {
         <Instagram />
       </Link>
 
-      {/* Middle nav icons */}
       <div className="flex flex-col gap-6 items-center">
         <Link href={"/"}>
           <Home size={26} />
@@ -39,7 +38,6 @@ export const Navbar = () => {
           <SquarePlus size={26} />
         </Link>
 
-        {/* Profile link */}
         {user ? (
           <Link href={`/${user.username}`}>
             <User size={26} />
@@ -49,7 +47,6 @@ export const Navbar = () => {
         )}
       </div>
 
-      {/* Bottom more button */}
       <div className="mt-auto">
         <Menu size={26} />
       </div>
