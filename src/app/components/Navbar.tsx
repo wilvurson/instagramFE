@@ -20,7 +20,7 @@ export const Navbar = () => {
 
   return (
     <div className="fixed left-0 top-0 h-full w-[80px] bg-black border-r border-neutral-800 flex flex-col justify-between items-center py-4 text-white">
-      {/* Top logo */}
+
       <Link href={"/"} className="mb-15">
         <Instagram />
       </Link>

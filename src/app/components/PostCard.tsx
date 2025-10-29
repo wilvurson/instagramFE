@@ -16,6 +16,8 @@ export const PostCard = ({ post }: { post: Post }) => {
   const [showAllComments, setShowAllComments] = useState(false);
   const [isShared, setIsShared] = useState(false);
   const [shareCount, setShareCount] = useState(post.shares.length);
+  const [isSaved, setIsSaved] = useState(false);
+  const [saveCount, setSaveCount] = useState(post.saves.length);
   const [bookmarked, setBookmarked] = useState(false);
 
   const axios = useAxios();
@@ -30,6 +32,7 @@ export const PostCard = ({ post }: { post: Post }) => {
       const userId = user._id;
       setIsLiked(post.likes.some((like) => like.createdBy._id === userId));
       setIsShared(post.shares.some((share) => share.createdBy._id === userId))
+      setIsSaved(post.saves.some((save) => save.createdBy._id === userId))
     }
   }, [user]);
 
@@ -62,7 +65,7 @@ export const PostCard = ({ post }: { post: Post }) => {
       <img
         src={post.imageUrl}
         alt="Post image"
-        className="w-full max-h-[600px] object-contain bg-black"
+        className="w-full max-h-[600px] object-contain bg-black rounded-2xl"
       />
     ) : (
       <div className="text-gray-500 p-4">No image available</div>
@@ -101,28 +104,34 @@ export const PostCard = ({ post }: { post: Post }) => {
     </div>
 
     <div className="ml-auto hover:opacity-70 cursor-pointer transition-transform active:scale-90">
-      <Bookmark
-      stroke={bookmarked ? "none" : "white"}  
-      fill={bookmarked ? "white" : "none"}  
-      onClick={() => setBookmarked(!bookmarked)}
-      style={{ cursor: "pointer" }}
-      size={24}
-    />
+      <div
+      className="ml-4 hover:opacity-70 cursor-pointer transition-transform active:scale-90"
+      onClick={async () => {
+        const response = await axios.post(`/posts/${post._id}/save`);
+        setIsSaved(response.data.isSaved);
+        setSaveCount(saveCount + (response.data.isSaved ? 1 : -1));
+      }}
+    >
+      {isSaved ? <Bookmark fill="white" stroke="white" /> : <Bookmark stroke="white" />}
+    </div>
     </div>
   </div>
 
-  <div className="px-4 text-sm text-gray-300">
+  <div className="px-4 text-sm text-gray-300 flex justify-between">
     <div className="flex gap-4 font-medium">
       <span>{likeCount} likes</span>
       <span>{comments.length} comments</span>
-      <span>{shareCount ?? 0} shares</span>
+      <span>{shareCount} shares</span>
+    </div>
+    <div className="flex gap-4 font-medium">
+      <span>{saveCount} saves</span>
     </div>
   </div>
 
   <div className="px-4 text-sm mt-1 text-gray-300">
     <Link href={`/${post.createdBy.username}`}>
       <b>{post.createdBy.username}</b>
-    </Link>{" "}
+    </Link>
     {post.description || "No description"}
   </div>
 
@@ -187,32 +196,6 @@ export const PostCard = ({ post }: { post: Post }) => {
       </div>
     )}
   </div>
-
-  {showAllComments && (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#ffffff04]">
-      <div className="w-11/12 max-w-lg max-h-[80vh] overflow-y-auto rounded-lg p-4 border border-gray-700">
-
-        <div className="flex justify-between items-center mb-4">
-          <h2 className="text-white font-semibold">All Comments</h2>
-          <button
-            className="text-gray-400 hover:text-white"
-            onClick={() => setShowAllComments(false)}
-          >
-            Close
-          </button>
-        </div>
-
-        <div className="space-y-3 text-gray-300 text-sm">
-          {comments.map((comment) => (
-            <div key={comment._id}>
-              <b>{comment.createdBy.username}: </b>
-              {comment.text}
-            </div>
-          ))}
-        </div>
-      </div>
-    </div>
-  )}
 </div>
 
   );

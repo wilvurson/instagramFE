@@ -3,6 +3,8 @@ export type User = {
   username: string;
   fullname: string;
   password: string;
+  followers: string;
+  followings: string;
 
   email: string | null;
   phone: string | null;
@@ -27,6 +29,12 @@ export type PostShare = {
   createdBy: User;
 };
 
+export type PostSave = {
+  _id: string;
+  createdAt: string;
+  createdBy: User;
+};
+
 export type Post = {
   _id: string;
   imageUrl: string;
@@ -36,4 +44,5 @@ export type Post = {
   comments: PostComment[];
   likes: PostLike[];
   shares: PostShare[];
+  saves: PostSave[];
 };

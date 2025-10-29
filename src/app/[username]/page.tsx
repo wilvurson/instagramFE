@@ -38,7 +38,7 @@ const ProfilePage = () => {
         const postRes = await axios.get(`/posts/user/${username}`);
         setPosts(postRes.data);
       } catch (err: any) {
-        console.error("Error fetching profile:", err);
+        console.error(err);
         if (err.response?.status === 404) setIsNotFound(true);
       } finally {
         setLoading(false);
@@ -81,8 +81,6 @@ const ProfilePage = () => {
 
           <div className="flex justify-center md:block mb-6 md:mb-0">
             <img
-              src={"/default-avatar.png"}
-              alt="profile"
               className="w-32 h-32 rounded-full object-cover border border-gray-700"
             />
           </div>
@@ -97,9 +95,9 @@ const ProfilePage = () => {
             </div>
 
             <div className="flex justify-center md:justify-start gap-8 mb-4 text-sm">
-              <span>{posts?.length || 0} posts</span>
-              <span>{user?.followers?.length || 0} followers</span>
-              <span>{user?.followings?.length || 0} following</span>
+              <span>{posts?.length} posts</span>
+              <span>{user?.followers.length} followers</span>
+              <span>{user?.followings.length} following</span>
             </div>
 
             <div className="text-sm leading-snug mb-4">
@@ -145,7 +143,7 @@ const ProfilePage = () => {
         <div className="posts grid grid-cols-3 gap-2">
           {posts.length > 0 ? (
             posts.map((post) => (
-              <div key={post._id} className="w-40 h-40 overflow-hidden group">
+              <div key={post._id} className="w-50 h-80 rounded-2xl overflow-hidden group hover:border-2 hover:border-gray-800">
                 <img
                   src={post.imageUrl}
                   alt="post"

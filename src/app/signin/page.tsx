@@ -39,18 +39,20 @@ const SingInPage = () => {
   };
 
   return (
-    <div className="w-full h-screen flex justify-center items-center">
-          <img src="https://instaproapp.tools/wp-content/uploads/2025/07/insta-pro.png" alt="pic" />
+    <div className="w-full h-screen flex justify-center items-center bg-stone-900">
       <div className="flex flex-col items-center mb-6">
-        <div>
-          <img
-            className="h-40"
-            src="https://download.logo.wine/logo/Instagram/Instagram-Wordmark-Black-Logo.wine.png"
+        <div className="flex flex-col border-stone-700 bg-black rounded-2xl justify-between p-5 w-70 h-120">
+          <div className="flex justify-center w-full">
+            <img
+            className="h-30 w-40 flex fle"
+            src="https://image.similarpng.com/file/similarpng/original-picture/2020/06/Instagram-name-logo-transparent-PNG.png"
             alt="logo"
           />
-          <div className="flex flex-col gap-4">
+          </div>
+          
+          <div className="flex flex-col gap-4 mb-50">
             <Input
-              placeholder="Enter your email, phone or username..."
+              placeholder="Enter your email..."
               value={credential}
               onChange={(e) => {
                 setCredential(e.target.value);
@@ -75,7 +77,7 @@ const SingInPage = () => {
                 {passwordShown ? <Eye /> : <EyeClosed />}
               </Button>
             </div>
-            <Button className="bg-blue-700" onClick={handleSignin}>login</Button>
+            <Button className="bg-blue-700 mt-10" onClick={handleSignin}>login</Button>
           </div>
         </div>
       </div>
