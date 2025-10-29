@@ -23,7 +23,7 @@ export const UserContextProvider = ({ children }: React.PropsWithChildren) => {
 
   const authenticateUser = async () => {
     setLoading(true);
-    const response = await fetch("https://instagram-be-seven.vercel.app/me", {
+    const response = await fetch("http://localhost:5500/me", {
       headers: {
         Authorization: "Bearer " + token,
       },

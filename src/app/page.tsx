@@ -12,7 +12,7 @@ export default function Home() {
   const { user, loading } = useContext(UserContext);
 
   useEffect(() => {
-    fetch("https://instagram-be-seven.vercel.app/posts")
+    fetch("http://localhost:5500/posts")
       .then((res) => res.json())
       .then((data) => {
         setPosts(data);
