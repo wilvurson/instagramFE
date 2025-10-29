@@ -11,18 +11,18 @@ import {
   SquarePlus,
   User,
   Menu,
-  Instagram
+  Instagram,
 } from "lucide-react";
 import { useUser } from "../providers/UserProvider";
 
-
 export const Navbar = () => {
+  const { user } = useUser(); // get current logged-in user
+
   return (
     <div className="fixed left-0 top-0 h-full w-[80px] bg-black border-r border-neutral-800 flex flex-col justify-between items-center py-4 text-white">
       {/* Top logo */}
       <Link href={"/"} className="mb-15">
-        < Instagram />
-          
+        <Instagram />
       </Link>
 
       {/* Middle nav icons */}
@@ -38,7 +38,15 @@ export const Navbar = () => {
         <Link href={"/create"}>
           <SquarePlus size={26} />
         </Link>
+
+        {/* Profile link */}
+        {user ? (
+          <Link href={`/${user.username}`}>
+            <User size={26} />
+          </Link>
+        ) : (
           <User size={26} />
+        )}
       </div>
 
       {/* Bottom more button */}

@@ -19,7 +19,6 @@ const ProfilePage = () => {
   const [loading, setLoading] = useState(true);
   const [isFollowing, setIsFollowing] = useState(false);
 
-
   const { user: currentUser } = useUser();
 
   useEffect(() => {
@@ -145,30 +144,28 @@ const ProfilePage = () => {
         )}
       </div>
 
-      {/* Divider */}
-        <div className="border-t border-gray-800 mt-8 mb-8" />
+      <div className="border-t border-gray-800 mt-8 mb-8" />
 
-{/* Posts Grid */}
-{posts.length > 0 ? (
-  <div className="flex flex-wrap justify-center gap-1 sm:gap-2 md:gap-3">
-    {posts.map((post) => (
-      <div
-        key={post._id}
-        className="w-[30%] sm:w-[28%] md:w-[30%] aspect-square overflow-hidden group"
-      >
-        <img
-          src={post.imageUrl} // make sure your post type has imageUrl
-          alt="post"
-          className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
-        />
+      <div className="flex justify-center mt-8">
+        <div className="posts grid grid-cols-3 gap-2">
+          {posts.length > 0 ? (
+            posts.map((post) => (
+              <div key={post._id} className="w-40 h-40 overflow-hidden group">
+                <img
+                  src={post.imageUrl}
+                  alt="post"
+                  className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                />
+              </div>
+            ))
+          ) : (
+            <div className="col-span-3 text-center text-gray-500 mt-10">
+              No posts yet
+            </div>
+          )}
+        </div>
       </div>
-    ))}
-  </div>
-) : (
-  <div className="text-center text-gray-500 mt-10">No posts yet</div>
-)}
-
-      </div>
+    </div>
   );
 };
 
