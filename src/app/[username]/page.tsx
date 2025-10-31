@@ -159,7 +159,7 @@ const ProfilePage = () => {
         )}
       </div>
 
-      <div className="border-t border-gray-800 mt-8 mb-8" />
+      <div className="border-t border-stone-800 mt-8 mb-8" />
 
       <div className="flex justify-center mt-8">
         <div className="posts grid grid-cols-3 gap-2">
@@ -167,7 +167,7 @@ const ProfilePage = () => {
             posts.map((post) => (
               <div
                 key={post._id}
-                className="w-50 h-80 rounded-2xl overflow-hidden group border-2 border-gray-800 hover:border-2 hover:border-gray-200"
+                className="w-50 h-80 rounded-2xl overflow-hidden group border-2 border-stone-800 hover:border-2 hover:border-stone-600"
               >
                 <img
                   src={post.imageUrl}

@@ -198,7 +198,7 @@ export const PostCard = ({ post }: { post: Post }) => {
 
       {showAllComments && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-          <div className="bg-stone-900/80 max-w-3xl max-h-[80vh] overflow-y-auto rounded-lg p-4 flex flex-col md:flex-row gap-x-3">
+          <div className="bg-stone-900/90 max-w-3xl max-h-[80vh] overflow-y-auto rounded-lg p-4 flex flex-col md:flex-row gap-x-3">
 
             <div className="w-full flex justify-center items-center">
               {post.imageUrl ? (

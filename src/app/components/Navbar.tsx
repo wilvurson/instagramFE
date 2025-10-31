@@ -8,7 +8,7 @@ import {
   Clapperboard,
   MessageCircle,
   Heart,
-  SquarePlus,
+  Plus,
   User,
   Menu,
   Instagram,
@@ -21,7 +21,7 @@ export const Navbar = () => {
   return (
     <div className="fixed left-0 top-0 h-full w-[80px] bg-black border-r border-neutral-800 flex flex-col justify-between items-center py-4 text-white">
 
-      <Link href={"/"} className="mb-15">
+      <Link href={"/"} className="mb-15 mt-5">
         <Instagram />
       </Link>
 
@@ -35,7 +35,7 @@ export const Navbar = () => {
         <MessageCircle size={26} />
         <Heart size={26} />
         <Link href={"/create"}>
-          <SquarePlus size={26} />
+          <Plus size={30} />
         </Link>
 
         {user ? (
