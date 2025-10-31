@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { MoreHorizontal, Check } from "lucide-react";
 import { Navbar } from "../components/Navbar";
 import { useUser } from "../providers/UserProvider";
+import Link from "next/link";
 
 const ProfilePage = () => {
   const { username } = useParams();
@@ -17,7 +18,9 @@ const ProfilePage = () => {
   const [posts, setPosts] = useState<Post[]>([]);
   const [isNotFound, setIsNotFound] = useState(false);
   const [loading, setLoading] = useState(true);
+
   const [isFollowing, setIsFollowing] = useState(false);
+  const [followerCount, setFollowerCount] = useState(0);
 
   const { user: currentUser } = useUser();
 
@@ -26,14 +29,16 @@ const ProfilePage = () => {
 
     const fetchProfile = async () => {
       try {
-
         const userRes = await axios.get(`/users/${username}`);
-        setUser(userRes.data);
+        const userData = userRes.data;
+        setUser(userData);
 
-        const follows = userRes.data.followers?.some(
+        const follows = userData.followers?.some(
           (f: any) => f.createdBy._id === currentUser?._id
         );
+
         setIsFollowing(follows);
+        setFollowerCount(userData.followers?.length || 0);
 
         const postRes = await axios.get(`/posts/user/${username}`);
         setPosts(postRes.data);
@@ -50,11 +55,24 @@ const ProfilePage = () => {
 
   const handleFollow = async () => {
     if (!user) return;
+
+    const previousState = isFollowing;
+    const prevCount = followerCount;
+
+    setIsFollowing(!previousState);
+    setFollowerCount(prevCount + (previousState ? -1 : 1));
+
     try {
-      const res = await axios.post(`/users/${user.username}/follow`);
-      setIsFollowing(res.data.isFollowing);
+      const response = await axios.post(`/users/${user.username}/follow`);
+      setIsFollowing(response.data.isFollowing);
+
+      if (typeof response.data.followerCount === "number") {
+        setFollowerCount(response.data.followerCount);
+      }
     } catch (err) {
       console.error(err);
+      setIsFollowing(previousState);
+      setFollowerCount(prevCount);
     }
   };
 
@@ -78,10 +96,11 @@ const ProfilePage = () => {
 
       <div className="w-full flex justify-center pt-10 px-4">
         <div className="flex flex-col md:flex-row md:items-center md:gap-10 mb-8">
-
           <div className="flex justify-center md:block mb-6 md:mb-0">
             <img
+              src={user?.profilePicture || "/default-avatar.png"}
               className="w-32 h-32 rounded-full object-cover border border-gray-700"
+              alt="Profile Picture"
             />
           </div>
 
@@ -95,14 +114,14 @@ const ProfilePage = () => {
             </div>
 
             <div className="flex justify-center md:justify-start gap-8 mb-4 text-sm">
-              <span>{posts?.length} posts</span>
-              <span>{user?.followers.length} followers</span>
+              <span>{posts.length} posts</span>
+              <span>{followerCount} followers</span>
               <span>{user?.followings.length} following</span>
             </div>
 
             <div className="text-sm leading-snug mb-4">
               <span className="font-semibold block">{user?.fullname}</span>
-              <p className="text-gray-300">{"No bio yet."}</p>
+              <p className="text-gray-300">{user?.bio || "No bio yet."}</p>
             </div>
           </div>
         </div>
@@ -110,17 +129,20 @@ const ProfilePage = () => {
 
       <div className="flex justify-center gap-2 mb-6">
         {isOwnProfile ? (
-          <Button className="bg-[#262626] text-white text-sm font-semibold w-40 h-10 hover:bg-[#363636]">
+          <Link
+            href="/edit/profile"
+            className="mt-2 px-4 py-2 rounded-2xl bg-[#262626] text-white hover:bg-[#363636] transition"
+          >
             Edit Profile
-          </Button>
+          </Link>
         ) : (
           <>
             <Button
               onClick={handleFollow}
-              className={`text-sm font-semibold w-40 h-10 px-6 ${
+              className={`text-sm font-semibold w-40 h-10 px-6 transition-transform active:scale-95 ${
                 isFollowing
                   ? "bg-[#262626] text-white hover:bg-[#363636]"
-                  : "bg-[#0051ff] text-white hover:bg-[#1839f2]"
+                  : "bg-white text-black hover:bg-stone-200"
               }`}
             >
               {isFollowing ? "Following" : "Follow"}
@@ -143,11 +165,14 @@ const ProfilePage = () => {
         <div className="posts grid grid-cols-3 gap-2">
           {posts.length > 0 ? (
             posts.map((post) => (
-              <div key={post._id} className="w-50 h-80 rounded-2xl overflow-hidden group hover:border-2 hover:border-gray-800">
+              <div
+                key={post._id}
+                className="w-50 h-80 rounded-2xl overflow-hidden group border-2 border-gray-800 hover:border-2 hover:border-gray-200"
+              >
                 <img
                   src={post.imageUrl}
                   alt="post"
-                  className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                  className="w-full h-full object-cover hover:scale-103 transition-transform duration-300"
                 />
               </div>
             ))

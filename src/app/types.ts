@@ -8,6 +8,8 @@ export type User = {
 
   email: string | null;
   phone: string | null;
+  profilePicture?: string;
+  bio?: string;
 };
 
 export type PostComment = {

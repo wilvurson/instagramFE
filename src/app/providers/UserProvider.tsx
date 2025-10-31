@@ -24,9 +24,7 @@ export const UserContextProvider = ({ children }: React.PropsWithChildren) => {
   const authenticateUser = async () => {
     setLoading(true);
     const response = await fetch("http://localhost:5500/me", {
-      headers: {
-        Authorization: "Bearer " + token,
-      },
+      headers: { Authorization: "Bearer " + token },
     });
     if (response.status !== 200) {
       setUser(null);
@@ -41,10 +39,8 @@ export const UserContextProvider = ({ children }: React.PropsWithChildren) => {
   };
 
   useEffect(() => {
-    if (window) {
-      const localToken = localStorage.getItem("authToken") as string;
-      setToken(JSON.parse(localToken));
-    }
+    const localToken = localStorage.getItem("authToken");
+    if (localToken) setToken(JSON.parse(localToken));
   }, []);
 
   useEffect(() => {
@@ -56,10 +52,11 @@ export const UserContextProvider = ({ children }: React.PropsWithChildren) => {
     }
   }, [token]);
 
-  return <UserContext.Provider value={{ user, token, loading, setToken }}>{children}</UserContext.Provider>;
+  return (
+    <UserContext.Provider value={{ user, token, loading, setToken }}>
+      {children}
+    </UserContext.Provider>
+  );
 };
 
-export const useUser = () => {
-  const ctx = useContext(UserContext);
-  return ctx;
-};
+export const useUser = () => useContext(UserContext);
