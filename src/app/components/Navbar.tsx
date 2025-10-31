@@ -50,7 +50,7 @@ export const Navbar = () => {
           <Link href={`/${user.username}`} className="hover:opacity-70 transition-transform active:scale-90">
             <Image
               src={user.profilePicture || "/default-avatar.png"}
-              alt={user.username}
+              alt=""
               width={40}
               height={40}
               className="rounded-full object-cover"

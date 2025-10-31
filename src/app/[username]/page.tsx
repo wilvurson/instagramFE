@@ -9,10 +9,18 @@ import { MoreHorizontal, Check } from "lucide-react";
 import { Navbar } from "../components/Navbar";
 import { useUser } from "../providers/UserProvider";
 import Link from "next/link";
+import { UsersBar } from "../components/UsersBar";
+
+interface TheUser {
+  _id: string;
+  username: string;
+}
 
 const ProfilePage = () => {
   const { username } = useParams();
   const axios = useAxios();
+
+  const [users, setUsers] = useState<TheUser[]>([]);
 
   const [user, setUser] = useState<User | null>(null);
   const [posts, setPosts] = useState<Post[]>([]);
@@ -91,7 +99,7 @@ const ProfilePage = () => {
   const isOwnProfile = currentUser?.username === user?.username;
 
   return (
-    <div className="min-h-screen bg-black text-white w-full">
+    <div className="min-h-screen bg-black text-white w-full cursor-default">
       <Navbar />
 
       <div className="w-full flex justify-center pt-10 px-4">
@@ -99,8 +107,7 @@ const ProfilePage = () => {
           <div className="flex justify-center md:block mb-6 md:mb-0">
             <img
               src={user?.profilePicture || "/default-avatar.png"}
-              className="w-32 h-32 rounded-full object-cover border border-gray-700"
-              alt="Profile Picture"
+              className="w-40 h-40 rounded-full object-cover border border-gray-700"
             />
           </div>
 
@@ -119,9 +126,9 @@ const ProfilePage = () => {
               <span>{user?.followings.length} following</span>
             </div>
 
-            <div className="text-sm leading-snug mb-4">
+            <div className="text-sm leading-snug mb-4 flex flex-col gap-y-4 cursor-default">
               <span className="font-semibold block">{user?.fullname}</span>
-              <p className="text-gray-300">{user?.bio || "No bio yet."}</p>
+              <p className="text-stone-500">{user?.bio || "No bio yet."}</p>
             </div>
           </div>
         </div>
@@ -129,9 +136,11 @@ const ProfilePage = () => {
 
       <div className="flex justify-center gap-2 mb-6">
         {isOwnProfile ? (
+          
+
           <Link
             href="/edit/profile"
-            className="mt-2 px-4 py-2 rounded-2xl bg-[#262626] text-white hover:bg-[#363636] transition"
+            className="mt-2 px-4 py-2 rounded-xl bg-[#262626] text-white hover:bg-[#363636] transition"
           >
             Edit Profile
           </Link>

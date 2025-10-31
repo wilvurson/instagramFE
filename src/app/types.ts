@@ -9,7 +9,7 @@ export type User = {
   email: string | null;
   phone: string | null;
   profilePicture?: string;
-  bio?: string;
+  bio: string;
 };
 
 export type PostComment = {
@@ -38,6 +38,7 @@ export type PostSave = {
 };
 
 export type Post = {
+  username: any;
   _id: string;
   imageUrl: string;
   description: string;

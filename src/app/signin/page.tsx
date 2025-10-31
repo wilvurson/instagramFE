@@ -51,7 +51,7 @@ const SignInPage = () => {
 
           <div className="flex flex-col gap-4">
             <Input
-              placeholder="Email or phone..."
+              placeholder="Email or username..."
               value={credential}
               onChange={(e) => setCredential(e.target.value)}
               className="border-2 border-stone-600"

@@ -59,7 +59,7 @@ export const PostCard = ({ post }: { post: Post }) => {
       <div className="flex items-center gap-2 text-sm text-stone-300 px-4 py-3">
         <Image
           src={post.createdBy.profilePicture || "/default-avatar.png"}
-          alt={post.createdBy.username}
+          alt=""
           width={40}
           height={40}
           className="rounded-full object-cover"

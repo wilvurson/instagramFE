@@ -9,16 +9,20 @@ import { Button } from "@/components/ui/button";
 import { Upload } from "lucide-react";
 import { useUser } from "../../providers/UserProvider";
 import { useAxios } from "../../hooks/useAxios";
+import Link from "next/link";
 
 const EditProfilePage = () => {
   const { user: currentUser, token } = useUser();
   const axios = useAxios();
   const router = useRouter();
 
+  const [username, setUsername] = useState(currentUser?.username);
   const [fullname, setFullname] = useState(currentUser?.fullname || "");
   const [bio, setBio] = useState(currentUser?.bio || "");
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [previewUrl, setPreviewUrl] = useState<string>(currentUser?.profilePicture || "");
+  const [previewUrl, setPreviewUrl] = useState<string>(
+    currentUser?.profilePicture || ""
+  );
   const [uploading, setUploading] = useState(false);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -52,7 +56,11 @@ const EditProfilePage = () => {
         profilePictureUrl = data.url;
       }
 
-      await axios.patch("/users/me", { fullname, bio, profilePicture: profilePictureUrl });
+      await axios.patch("/users/me", {
+        fullname,
+        bio,
+        profilePicture: profilePictureUrl,
+      });
 
       toast.success("Profile updated successfully!");
       router.push(`/${currentUser?.username}`);
@@ -68,10 +76,13 @@ const EditProfilePage = () => {
     <div className="max-w-md mx-auto mt-10 p-4 text-white">
       <h1 className="text-2xl font-bold mb-4 text-center">Edit profile</h1>
 
-      <label htmlFor="file-upload" className="cursor-pointer flex justify-center mb-6">
+      <label
+        htmlFor="file-upload"
+        className="cursor-pointer flex justify-center mb-6"
+      >
         <div className="relative w-32 h-32 rounded-full overflow-hidden border border-gray-700">
           {previewUrl ? (
-            <Image src={previewUrl} alt="PFP" fill className="object-cover" />
+            <Image src={previewUrl} alt="" fill className="object-cover" />
           ) : (
             <Upload className="w-12 h-12 text-gray-400 m-auto mt-10" />
           )}
@@ -87,7 +98,13 @@ const EditProfilePage = () => {
 
       <div className="mb-4 flex flex-col gap-4">
         <Input
-          placeholder="Full name"
+          placeholder="Username"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          className="border-2 border-stone-600"
+        />
+        <Input
+          placeholder="Fullname"
           value={fullname}
           onChange={(e) => setFullname(e.target.value)}
           className="border-2 border-stone-600"
@@ -103,6 +120,9 @@ const EditProfilePage = () => {
       <Button onClick={handleSubmit} disabled={uploading} className="w-full">
         {uploading ? "Updating..." : "Save Changes"}
       </Button>
+      <Link href={`/${currentUser?.username}`}>
+        <Button className="w-full mt-5">Go Back</Button>
+      </Link>
     </div>
   );
 };
