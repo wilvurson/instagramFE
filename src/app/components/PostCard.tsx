@@ -55,8 +55,8 @@ export const PostCard = ({ post }: { post: Post }) => {
       key={post._id}
       className="mb-8 text-white bg-black rounded-2xl overflow-hidden"
     >
-      {/* Post Header */}
-      <div className="flex items-center gap-2 text-sm text-gray-300 px-4 py-3">
+
+      <div className="flex items-center gap-2 text-sm text-stone-300 px-4 py-3">
         <Image
           src={post.createdBy.profilePicture || "/default-avatar.png"}
           alt={post.createdBy.username}
@@ -69,11 +69,10 @@ export const PostCard = ({ post }: { post: Post }) => {
             {post.createdBy.username}
           </div>
         </Link>
-        <div className="text-gray-500">•</div>
-        <div className="text-gray-500">{dayjs(post.createdAt).fromNow()}</div>
+        <div className="text-stone-500">•</div>
+        <div className="text-stone-500">{dayjs(post.createdAt).fromNow()}</div>
       </div>
 
-      {/* Post Image */}
       <div className="w-full bg-black flex justify-center">
         {post.imageUrl ? (
           <img
@@ -82,11 +81,10 @@ export const PostCard = ({ post }: { post: Post }) => {
             className="w-full max-h-[600px] object-contain bg-black"
           />
         ) : (
-          <div className="text-gray-500 p-4">No image available</div>
+          <div className="text-stone-500 p-4">No image available</div>
         )}
       </div>
 
-      {/* Post Actions */}
       <div className="flex items-center px-4 py-2">
         <div
           className="hover:opacity-70 cursor-pointer transition-transform active:scale-90"
@@ -141,8 +139,7 @@ export const PostCard = ({ post }: { post: Post }) => {
         </div>
       </div>
 
-      {/* Stats */}
-      <div className="px-4 text-sm text-gray-300 flex justify-between">
+      <div className="px-4 text-sm text-stone-300 flex justify-between">
         <div className="flex gap-4 font-medium">
           <span>{likeCount} likes</span>
           <span>{comments.length} comments</span>
@@ -153,14 +150,14 @@ export const PostCard = ({ post }: { post: Post }) => {
         </div>
       </div>
 
-      <div className="px-4 text-sm mt-1 text-gray-300">
+      <div className="px-4 text-sm mt-1 text-stone-300">
         <Link href={`/${post.createdBy.username}`}>
           <b>{post.createdBy.username}</b>
         </Link>{" "}
         {post.description || "No description"}
       </div>
 
-      <div className="px-4 mt-2 space-y-1 text-sm text-gray-300">
+      <div className="px-4 mt-2 space-y-1 text-sm text-stone-300">
         {comments.slice(0, totalComments).map((comment) => (
           <div key={comment._id}>
             <b>{comment.createdBy.username}: </b>
@@ -171,7 +168,7 @@ export const PostCard = ({ post }: { post: Post }) => {
         {comments.length > totalComments && !showAllComments && (
           <div
             onClick={() => setShowAllComments(true)}
-            className="text-gray-500 text-sm hover:underline cursor-pointer"
+            className="text-stone-500 text-sm hover:underline cursor-pointer"
           >
             View all {comments.length} comments
           </div>
@@ -183,7 +180,7 @@ export const PostCard = ({ post }: { post: Post }) => {
           value={text}
           onChange={(e) => setText(e.target.value)}
           placeholder="Add a comment..."
-          className="flex-1 resize-none text-sm bg-black text-white placeholder-gray-500 focus:outline-none"
+          className="flex-1 resize-none text-sm bg-black text-white placeholder-stone-500 focus:outline-none"
           rows={1}
         />
         {text.length > 0 && (
@@ -197,8 +194,8 @@ export const PostCard = ({ post }: { post: Post }) => {
       </div>
 
       {showAllComments && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-          <div className="bg-stone-900/90 max-w-3xl max-h-[80vh] overflow-y-auto rounded-lg p-4 flex flex-col md:flex-row gap-x-3">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70">
+          <div className="bg-[#161616] max-w-3xl max-h-[80vh] overflow-y-auto rounded-lg p-4 flex flex-col md:flex-row gap-x-3">
 
             <div className="w-full flex justify-center items-center">
               {post.imageUrl ? (
@@ -208,7 +205,7 @@ export const PostCard = ({ post }: { post: Post }) => {
                   className="max-h-[70vh] w-auto object-contain rounded-lg"
                 />
               ) : (
-                <div className="text-gray-500 p-4">
+                <div className="text-stone-500 p-4">
                   nothing to show you buddy
                 </div>
               )}
@@ -216,7 +213,7 @@ export const PostCard = ({ post }: { post: Post }) => {
 
             <div className="md:w-1/2 w-full flex flex-col">
 
-              <div className="flex items-center gap-2 text-sm text-gray-300 mb-3 px-2 py-1 border-b border-stone-700">
+              <div className="flex items-center gap-2 text-sm text-stone-300 mb-3 px-2 py-1 border-b border-stone-700">
                 <Image
                   src={post.createdBy.profilePicture || "/default-avatar.png"}
                   alt={post.createdBy.username}
@@ -230,7 +227,7 @@ export const PostCard = ({ post }: { post: Post }) => {
                       {post.createdBy.username}
                     </span>
                   </Link>
-                  <div className="text-gray-500 text-xs">
+                  <div className="text-stone-500 text-xs">
                     {dayjs(post.createdAt).fromNow()}
                   </div>
                 </div>
@@ -249,10 +246,10 @@ export const PostCard = ({ post }: { post: Post }) => {
                       height={32}
                       className="rounded-full object-cover mt-1"
                     />
-                    <div className="text-gray-300 text-sm">
+                    <div className="text-stone-300 text-sm">
                       <div className="flex gap-2 items-center">
                         <b>{comment.createdBy.username}</b>
-                        <span className="text-gray-500 text-xs">
+                        <span className="text-stone-500 text-xs">
                           {dayjs(comment.createdAt).fromNow()}
                         </span>
                       </div>
@@ -268,7 +265,7 @@ export const PostCard = ({ post }: { post: Post }) => {
                     value={text}
                     onChange={(e) => setText(e.target.value)}
                     placeholder="Add a comment..."
-                    className="flex-1 resize-none text-sm text-white placeholder-gray-500 focus:outline-none"
+                    className="flex-1 resize-none text-sm text-white placeholder-stone-500 focus:outline-none"
                     rows={1}
                   />
                   {text.length > 0 && (
@@ -281,7 +278,7 @@ export const PostCard = ({ post }: { post: Post }) => {
                   )}
                 </div>
                 <button
-                  className="text-gray-400 flex flex-col justify-center hover:text-white font-medium cursor-pointer"
+                  className="text-stone-400 flex flex-col justify-center hover:text-white font-medium cursor-pointer"
                   onClick={() => setShowAllComments(false)}
                 >
                   <X />
