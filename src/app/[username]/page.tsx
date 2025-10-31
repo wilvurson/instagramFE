@@ -5,22 +5,15 @@ import { useEffect, useState } from "react";
 import { useAxios } from "../hooks/useAxios";
 import { User, Post } from "../types";
 import { Button } from "@/components/ui/button";
-import { MoreHorizontal, Check } from "lucide-react";
+import { MoreHorizontal, Check, X } from "lucide-react";
 import { Navbar } from "../components/Navbar";
 import { useUser } from "../providers/UserProvider";
 import Link from "next/link";
-import { UsersBar } from "../components/UsersBar";
-
-interface TheUser {
-  _id: string;
-  username: string;
-}
+import { PostCard } from "../components/PostCard";
 
 const ProfilePage = () => {
   const { username } = useParams();
   const axios = useAxios();
-
-  const [users, setUsers] = useState<TheUser[]>([]);
 
   const [user, setUser] = useState<User | null>(null);
   const [posts, setPosts] = useState<Post[]>([]);
@@ -29,6 +22,8 @@ const ProfilePage = () => {
 
   const [isFollowing, setIsFollowing] = useState(false);
   const [followerCount, setFollowerCount] = useState(0);
+
+  const [selectedPost, setSelectedPost] = useState<Post | null>(null);
 
   const { user: currentUser } = useUser();
 
@@ -136,8 +131,6 @@ const ProfilePage = () => {
 
       <div className="flex justify-center gap-2 mb-6">
         {isOwnProfile ? (
-          
-
           <Link
             href="/edit/profile"
             className="mt-2 px-4 py-2 rounded-xl bg-[#262626] text-white hover:bg-[#363636] transition"
@@ -176,7 +169,8 @@ const ProfilePage = () => {
             posts.map((post) => (
               <div
                 key={post._id}
-                className="w-50 h-80 rounded-2xl overflow-hidden group border-2 border-stone-800 hover:border-2 hover:border-stone-600"
+                className="w-50 h-80 rounded-2xl overflow-hidden group border-2 border-stone-800 hover:border-2 hover:border-stone-600 cursor-pointer"
+                onClick={() => setSelectedPost(post)}
               >
                 <img
                   src={post.imageUrl}
@@ -192,6 +186,26 @@ const ProfilePage = () => {
           )}
         </div>
       </div>
+
+      {selectedPost && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70">
+          <div className="w-[90%] max-w-xl h-auto max-h-[80vh] overflow-auto rounded-2xl">
+            <PostCard
+              post={selectedPost}
+              onDelete={(id) => {
+                setPosts(posts.filter((p) => p._id !== id));
+                setSelectedPost(null);
+              }}
+            />
+          </div>
+          <button
+            className="absolute top-5 right-5 text-stone-400 hover:text-white cursor-pointer text-2xl"
+            onClick={() => setSelectedPost(null)}
+          >
+            <X />
+          </button>
+        </div>
+      )}
     </div>
   );
 };
