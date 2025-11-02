@@ -450,7 +450,7 @@ export const PostCard = ({
                   </div>
                 ))} 
             </div>
-
+            
             <div className="flex justify-between gap-4">
               <button
                 onClick={handleDeleteComment}
