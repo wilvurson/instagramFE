@@ -75,7 +75,6 @@ export const Navbar = () => {
         <Link href={"/"}><Home size={24} /></Link>
         <Search size={24} />
         <Link href={"/create"}><Plus size={28} /></Link>
-        <MessageCircle size={24} />
         {user ? (
           <Link href={`/${user.username}`}>
             <Image
@@ -89,6 +88,13 @@ export const Navbar = () => {
         ) : (
           <Link href="/login"><Heart size={24} /></Link>
         )}
+        <div
+          className="mt-auto text-red-400 cursor-pointer hover:text-red-700"
+          onClick={handleLogout}
+        >
+          <LogOut size={24} />
+        </div>
+        
       </div>
     </div>
   );

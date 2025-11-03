@@ -3,30 +3,28 @@
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import { useAxios } from "../hooks/useAxios";
-import { User, Post, Follower } from "../types";
-import { Button } from "@/components/ui/button";
-import { MoreHorizontal, Check, X } from "lucide-react";
-import { Navbar } from "../components/Navbar";
-import { useUser } from "../providers/UserProvider";
 import Link from "next/link";
+import { useAxios } from "../hooks/useAxios";
+import { useUser } from "../providers/UserProvider";
+import { Navbar } from "../components/Navbar";
+import { Post, User, Follower } from "../types";
+import { Button } from "@/components/ui/button";
+import { MoreHorizontal, Check, X, Heart, MessageCircle, Send } from "lucide-react";
 import { PostCard } from "../components/PostCard";
 
 const ProfilePage = () => {
   const { username } = useParams();
   const axios = useAxios();
+  const { user: currentUser } = useUser();
 
   const [user, setUser] = useState<User | null>(null);
   const [posts, setPosts] = useState<Post[]>([]);
-  const [isNotFound, setIsNotFound] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [isNotFound, setIsNotFound] = useState(false);
 
   const [isFollowing, setIsFollowing] = useState(false);
   const [followerCount, setFollowerCount] = useState(0);
-
   const [selectedPost, setSelectedPost] = useState<Post | null>(null);
-
-  const { user: currentUser } = useUser();
 
   useEffect(() => {
     if (!username) return;
@@ -38,17 +36,16 @@ const ProfilePage = () => {
         setUser(userData);
 
         const follows = userData.followers?.some(
-          (e: Follower) => e.createdBy._id === currentUser?._id
+          (f) => f.createdBy._id === currentUser?._id
         );
-
         setIsFollowing(follows || false);
         setFollowerCount(userData.followers?.length || 0);
 
         const postRes = await axios.get<Post[]>(`/posts/user/${username}`);
         setPosts(postRes.data);
       } catch (err: any) {
-        console.error(err);
         if (err.response?.status === 404) setIsNotFound(true);
+        console.error(err);
       } finally {
         setLoading(false);
       }
@@ -59,23 +56,21 @@ const ProfilePage = () => {
 
   const handleFollow = async () => {
     if (!user) return;
-
-    const previousState = isFollowing;
+    const prevState = isFollowing;
     const prevCount = followerCount;
 
-    setIsFollowing(!previousState);
-    setFollowerCount(prevCount + (previousState ? -1 : 1));
+    setIsFollowing(!prevState);
+    setFollowerCount(prevCount + (prevState ? -1 : 1));
 
     try {
       const response = await axios.post(`/users/${user.username}/follow`);
       setIsFollowing(response.data.isFollowing);
-
       if (typeof response.data.followerCount === "number") {
         setFollowerCount(response.data.followerCount);
       }
     } catch (err) {
       console.error(err);
-      setIsFollowing(previousState);
+      setIsFollowing(prevState);
       setFollowerCount(prevCount);
     }
   };
@@ -93,20 +88,25 @@ const ProfilePage = () => {
     );
 
   const isOwnProfile = currentUser?.username === user?.username;
+  const profileSrc =
+    user?.profilePicture && user.profilePicture !== ""
+      ? user.profilePicture
+      : "/default-avatar.png";
 
   return (
     <div className="min-h-screen bg-black text-white w-full cursor-default">
       <Navbar />
 
+      {/* Header */}
       <div className="w-full flex justify-center pt-10 px-4">
         <div className="flex flex-col md:flex-row md:items-center md:gap-10 mb-8">
           <div className="flex justify-center md:block mb-6 md:mb-0">
             <Image
-              src={user?.profilePicture || "/default-avatar.png"}
-              alt={user?.username || "User avatar"}
+              src={profileSrc}
+              alt="Profile Picture"
               width={160}
               height={160}
-              className="rounded-full object-cover border border-gray-700"
+              className="rounded-full object-cover bg-stone-900 border-2 border-stone-600 h-40 w-40"
             />
           </div>
 
@@ -125,14 +125,15 @@ const ProfilePage = () => {
               <span>{user?.followings.length} following</span>
             </div>
 
-            <div className="text-sm leading-snug mb-4 flex flex-col gap-y-4 cursor-default">
-              <span className="font-semibold block">{user?.fullname}</span>
+            <div className="text-sm leading-snug mb-4 flex flex-col gap-y-4">
+              <span className="font-semibold">{user?.fullname}</span>
               <p className="text-stone-500">{user?.bio || "No bio yet."}</p>
             </div>
           </div>
         </div>
       </div>
 
+      {/* Follow/Edit Buttons */}
       <div className="flex justify-center gap-2 mb-6">
         {isOwnProfile ? (
           <Link
@@ -167,22 +168,45 @@ const ProfilePage = () => {
 
       <div className="border-t border-stone-800 mt-8 mb-8" />
 
+      {/* Posts Grid */}
       <div className="flex justify-center mt-8">
-        <div className="posts grid grid-cols-3 gap-2">
+        <div className="grid grid-cols-3 gap-2">
           {posts.length > 0 ? (
             posts.map((post) => (
               <div
                 key={post._id}
-                className="w-50 h-80 rounded-2xl overflow-hidden group border-2 border-stone-800 hover:border-2 hover:border-stone-600 cursor-pointer"
+                className="relative w-40 h-40 rounded-2xl overflow-hidden group border-2 border-stone-800 hover:border-stone-600 cursor-pointer"
                 onClick={() => setSelectedPost(post)}
               >
                 <Image
                   src={post.imageUrl}
                   alt="Post image"
-                  width={300}
+                  width={400}
                   height={400}
-                  className="w-full h-full object-cover hover:scale-103 transition-transform duration-300"
+                  className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
                 />
+
+                {/* Hover Overlay */}
+                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center gap-4 text-white">
+                  <div className="flex items-center gap-1">
+                    <Heart className="w-5 h-5 fill-white" />
+                    <span className="text-sm font-semibold">
+                      {post.likes?.length ?? 0}
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <MessageCircle className="w-5 h-5 fill-white" />
+                    <span className="text-sm font-semibold">
+                      {post.comments?.length ?? 0}
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <Send className="w-5 h-5 fill-white" />
+                    <span className="text-sm font-semibold">
+                      {post.shares?.length ?? 0}
+                    </span>
+                  </div>
+                </div>
               </div>
             ))
           ) : (
@@ -193,6 +217,7 @@ const ProfilePage = () => {
         </div>
       </div>
 
+      {/* Post Modal */}
       {selectedPost && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70">
           <div className="w-[90%] flex max-w-xl h-auto max-h-[80vh] overflow-auto rounded-2xl">
@@ -205,7 +230,7 @@ const ProfilePage = () => {
             />
           </div>
           <button
-            className="text-stone-400 hover:text-white cursor-pointer text-2xl mb-[625px] ml-[20px]"
+            className="absolute top-5 right-5 text-stone-400 hover:text-white cursor-pointer text-3xl"
             onClick={() => setSelectedPost(null)}
           >
             <X />

@@ -43,6 +43,9 @@ export type PostSave = {
 };
 
 export type Post = {
+  commentCount: number;
+  shareCount: number;
+  likesCount: number;
   username: string;
   _id: string;
   imageUrl: string;

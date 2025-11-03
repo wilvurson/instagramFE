@@ -123,7 +123,7 @@ export const PostCard = ({
   };
 
   return (
-    <div key={post._id} className="mb-8 text-white bg-black rounded-2xl overflow-hidden">
+    <div key={post._id} className="mt-8 text-white bg-black rounded-2xl overflow-hidden">
 
       <div className="flex items-center justify-between text-sm text-stone-300 px-4 py-3">
         <div className="flex items-center gap-2">
@@ -132,7 +132,7 @@ export const PostCard = ({
             alt=""
             width={40}
             height={40}
-            className="rounded-full object-cover"
+            className="rounded-full object-cover w-10 h-10"
           />
           <Link href={`/${post.createdBy.username}`}>
             <div className="font-semibold hover:underline">{post.createdBy.username}</div>

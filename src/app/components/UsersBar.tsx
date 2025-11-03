@@ -12,6 +12,7 @@ interface User {
 export const UsersBar = () => {
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -36,6 +37,11 @@ export const UsersBar = () => {
       </div>
     );
 
+    const profileSrc =
+    user?.profilePicture && user.profilePicture !== ""
+      ? user.profilePicture
+      : "/default-avatar.png";
+
   return (
     <div className="hidden md:flex fixed flex-col right-0 top-0 h-full w-[200px] bg-black border-l border-stone-800 p-4 overflow-y-auto cursor-default">
       <div className="text-white text-lg font-semibold mb-4">Users</div>
@@ -46,13 +52,15 @@ export const UsersBar = () => {
             href={`/${user.username}`}
             className="flex items-center gap-2 hover:bg-neutral-900 px-3 py-2 rounded-lg transition-colors"
           >
-            <Image
-              src={user.profilePicture || "/default-avatar.png"}
-              alt={`${user.username}'s profile`}
-              width={40}
-              height={40}
-              className="rounded-full object-cover"
-            />
+            {user.profilePicture && (
+              <Image
+                src={user.profilePicture}
+                alt=""
+                width={40}
+                height={40}
+                className="rounded-full object-cover bg-stone-900 border-2 border-stone-600 w-10 h-10"
+              />
+            )}
             <span className="text-white font-medium truncate">@{user.username}</span>
           </Link>
         ))}
