@@ -9,7 +9,14 @@ import { useUser } from "../providers/UserProvider";
 import { Navbar } from "../components/Navbar";
 import { Post, User, Follower } from "../types";
 import { Button } from "@/components/ui/button";
-import { MoreHorizontal, Check, X, Heart, MessageCircle, Send } from "lucide-react";
+import {
+  MoreHorizontal,
+  Check,
+  X,
+  Heart,
+  MessageCircle,
+  Send,
+} from "lucide-react";
 import { PostCard } from "../components/PostCard";
 
 const ProfilePage = () => {
@@ -106,7 +113,7 @@ const ProfilePage = () => {
               alt="Profile Picture"
               width={160}
               height={160}
-              className="rounded-full object-cover bg-stone-900 border-2 border-stone-600 h-40 w-40"
+              className="rounded-full object-cover bg-stone-900 border-2 border-stone-600 h-32 w-32 sm:h-36 sm:w-36 md:h-40 md:w-40"
             />
           </div>
 
@@ -146,7 +153,7 @@ const ProfilePage = () => {
           <>
             <Button
               onClick={handleFollow}
-              className={`text-sm font-semibold w-40 h-10 px-6 transition-transform active:scale-95 ${
+              className={`text-sm font-semibold w-32 sm:w-40 h-10 px-6 transition-transform active:scale-95 ${
                 isFollowing
                   ? "bg-[#262626] text-white hover:bg-[#363636]"
                   : "bg-white text-black hover:bg-stone-200"
@@ -155,7 +162,7 @@ const ProfilePage = () => {
               {isFollowing ? "Following" : "Follow"}
             </Button>
 
-            <Button className="bg-[#262626] text-white text-sm font-semibold w-40 h-10 hover:bg-[#363636]">
+            <Button className="bg-[#262626] text-white text-sm font-semibold w-32 sm:w-40 h-10 hover:bg-[#363636]">
               Message
             </Button>
 
@@ -168,14 +175,14 @@ const ProfilePage = () => {
 
       <div className="border-t border-stone-800 mt-8 mb-8" />
 
-      {/* Posts Grid */}
-      <div className="flex justify-center mt-8">
-        <div className="grid grid-cols-3 gap-2">
+      {/* ✅ Posts Grid */}
+      <div className="flex justify-center mt-8 px-2">
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-2 justify-center">
           {posts.length > 0 ? (
             posts.map((post) => (
               <div
                 key={post._id}
-                className="relative w-40 h-40 rounded-2xl overflow-hidden group border-2 border-stone-800 hover:border-stone-600 cursor-pointer"
+                className="relative rounded-xl overflow-hidden group border border-stone-800 hover:border-stone-600 cursor-pointer w-[150px] h-[150px] sm:w-[160px] sm:h-[160px] md:w-[180px] md:h-[180px]"
                 onClick={() => setSelectedPost(post)}
               >
                 <Image
@@ -186,7 +193,6 @@ const ProfilePage = () => {
                   className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
                 />
 
-                {/* Hover Overlay */}
                 <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center gap-4 text-white">
                   <div className="flex items-center gap-1">
                     <Heart className="w-5 h-5 fill-white" />
@@ -217,10 +223,10 @@ const ProfilePage = () => {
         </div>
       </div>
 
-      {/* Post Modal */}
+      {/* ✅ Post Modal (scrollable on mobile) */}
       {selectedPost && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70">
-          <div className="w-[90%] flex max-w-xl h-auto max-h-[80vh] overflow-auto rounded-2xl">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 px-2">
+          <div className="w-full max-w-xl max-h-[90vh] overflow-y-auto rounded-2xl bg-black">
             <PostCard
               post={selectedPost}
               onDelete={(id) => {
