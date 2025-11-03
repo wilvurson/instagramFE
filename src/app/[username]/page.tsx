@@ -2,8 +2,9 @@
 
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import Image from "next/image";
 import { useAxios } from "../hooks/useAxios";
-import { User, Post } from "../types";
+import { User, Post, Follower } from "../types";
 import { Button } from "@/components/ui/button";
 import { MoreHorizontal, Check, X } from "lucide-react";
 import { Navbar } from "../components/Navbar";
@@ -33,21 +34,17 @@ const ProfilePage = () => {
     const fetchProfile = async () => {
       try {
         const userRes = await axios.get(`/users/${username}`);
-        const userData = userRes.data;
+        const userData: User & { followers: Follower[] } = userRes.data;
         setUser(userData);
 
         const follows = userData.followers?.some(
-          (e: {
-            createdBy: any;
-            fullname: string,
-            username: string,
-          }) => e.createdBy._id === currentUser?._id
+          (e: Follower) => e.createdBy._id === currentUser?._id
         );
 
-        setIsFollowing(follows);
+        setIsFollowing(follows || false);
         setFollowerCount(userData.followers?.length || 0);
 
-        const postRes = await axios.get(`/posts/user/${username}`);
+        const postRes = await axios.get<Post[]>(`/posts/user/${username}`);
         setPosts(postRes.data);
       } catch (err: any) {
         console.error(err);
@@ -104,9 +101,12 @@ const ProfilePage = () => {
       <div className="w-full flex justify-center pt-10 px-4">
         <div className="flex flex-col md:flex-row md:items-center md:gap-10 mb-8">
           <div className="flex justify-center md:block mb-6 md:mb-0">
-            <img
+            <Image
               src={user?.profilePicture || "/default-avatar.png"}
-              className="w-40 h-40 rounded-full object-cover border border-gray-700"
+              alt={user?.username || "User avatar"}
+              width={160}
+              height={160}
+              className="rounded-full object-cover border border-gray-700"
             />
           </div>
 
@@ -176,9 +176,11 @@ const ProfilePage = () => {
                 className="w-50 h-80 rounded-2xl overflow-hidden group border-2 border-stone-800 hover:border-2 hover:border-stone-600 cursor-pointer"
                 onClick={() => setSelectedPost(post)}
               >
-                <img
+                <Image
                   src={post.imageUrl}
-                  alt="post"
+                  alt="Post image"
+                  width={300}
+                  height={400}
                   className="w-full h-full object-cover hover:scale-103 transition-transform duration-300"
                 />
               </div>
@@ -203,7 +205,7 @@ const ProfilePage = () => {
             />
           </div>
           <button
-            className=" text-stone-400 hover:text-white cursor-pointer text-2xl mb-[625px] ml-[20px]"
+            className="text-stone-400 hover:text-white cursor-pointer text-2xl mb-[625px] ml-[20px]"
             onClick={() => setSelectedPost(null)}
           >
             <X />
