@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { useUser } from "../providers/UserProvider";
 import Image from "next/image";
 
 interface User {
@@ -14,12 +13,12 @@ interface User {
 export const UsersBar = () => {
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
-  const { user } = useUser();
 
   useEffect(() => {
     const fetchUsers = async () => {
       try {
         const res = await fetch("http://localhost:5500/users");
+        if (!res.ok) throw new Error("Failed to fetch users");
         const data = await res.json();
         setUsers(data.body || data);
       } catch (err) {
@@ -32,11 +31,18 @@ export const UsersBar = () => {
     fetchUsers();
   }, []);
 
-  if (loading) return <div className="text-white p-4">Loading users...</div>;
+  if (loading)
+    return (
+      <div className="fixed right-0 top-0 h-full w-[200px] bg-black border-l border-stone-800 p-4 text-white">
+        Loading users...
+      </div>
+    );
 
   return (
-    <div className="fixed right-0 top-0 h-full w-[200px] bg-black border-l border-stone-800 p-4 overflow-y-auto">
-      <h2 className="text-white text-lg font-semibold mb-4">Users</h2>
+    <div className="fixed right-0 top-0 h-full w-[200px] bg-black border-l border-stone-800 p-4 overflow-y-auto cursor-default">
+      <div className="text-white text-lg font-semibold mb-4 block">
+        Users
+      </div>
 
       <div className="flex flex-col gap-3">
         {users.map((user) => (
