@@ -15,7 +15,7 @@ const SignUpPage = () => {
   const [username, setUsername] = useState("");
 
   const handleSignup = async () => {
-    const response = await fetch("http://localhost:5500/signup", {
+    const response = await fetch("https://instagram-back-end-rxpd.onrender.com/signup", {
       headers: {
         "Content-Type": "application/json",
       },
