@@ -37,7 +37,11 @@ const ProfilePage = () => {
         setUser(userData);
 
         const follows = userData.followers?.some(
-          (e: any) => e.createdBy._id === currentUser?._id
+          (e: {
+            createdBy: any;
+            fullname: string,
+            username: string,
+          }) => e.createdBy._id === currentUser?._id
         );
 
         setIsFollowing(follows);
