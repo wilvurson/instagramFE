@@ -1,5 +1,4 @@
 "use client";
-
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
@@ -27,23 +26,19 @@ export const UsersBar = () => {
         setLoading(false);
       }
     };
-
     fetchUsers();
   }, []);
 
   if (loading)
     return (
-      <div className="fixed right-0 top-0 h-full w-[200px] bg-black border-l border-stone-800 p-4 text-white">
+      <div className="hidden md:flex fixed right-0 top-0 h-full w-[200px] bg-black border-l border-stone-800 p-4 text-white">
         Loading users...
       </div>
     );
 
   return (
-    <div className="fixed right-0 top-0 h-full w-[200px] bg-black border-l border-stone-800 p-4 overflow-y-auto cursor-default">
-      <div className="text-white text-lg font-semibold mb-4 block">
-        Users
-      </div>
-
+    <div className="hidden md:flex fixed flex-col right-0 top-0 h-full w-[200px] bg-black border-l border-stone-800 p-4 overflow-y-auto cursor-default">
+      <div className="text-white text-lg font-semibold mb-4">Users</div>
       <div className="flex flex-col gap-3">
         {users.map((user) => (
           <Link
@@ -58,9 +53,7 @@ export const UsersBar = () => {
               height={40}
               className="rounded-full object-cover"
             />
-            <span className="text-white font-medium truncate">
-              @{user.username}
-            </span>
+            <span className="text-white font-medium truncate">@{user.username}</span>
           </Link>
         ))}
       </div>
