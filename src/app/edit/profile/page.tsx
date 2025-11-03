@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
@@ -16,29 +16,35 @@ const EditProfilePage = () => {
   const axios = useAxios();
   const router = useRouter();
 
-  const [username, setUsername] = useState(currentUser?.username);
-  const [fullname, setFullname] = useState(currentUser?.fullname || "");
-  const [bio, setBio] = useState(currentUser?.bio || "");
+  const [username, setUsername] = useState<string>(currentUser?.username || "");
+  const [fullname, setFullname] = useState<string>(currentUser?.fullname || "");
+  const [bio, setBio] = useState<string>(currentUser?.bio || "");
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string>(
     currentUser?.profilePicture || ""
   );
-  const [uploading, setUploading] = useState(false);
+  const [uploading, setUploading] = useState<boolean>(false);
 
+  // Handle file input changes
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
     setSelectedFile(file);
+
     const reader = new FileReader();
-    reader.onloadend = () => setPreviewUrl(reader.result as string);
+    reader.onloadend = () => {
+      if (reader.result) setPreviewUrl(reader.result.toString());
+    };
     reader.readAsDataURL(file);
   };
 
+  // Handle profile update
   const handleSubmit = async () => {
+    if (!currentUser) return;
+
     try {
       setUploading(true);
-
       let profilePictureUrl = previewUrl;
 
       if (selectedFile) {
@@ -52,21 +58,24 @@ const EditProfilePage = () => {
 
         if (!uploadRes.ok) throw new Error("Failed to upload profile picture");
 
-        const data = await uploadRes.json();
+        const data: { url: string } = await uploadRes.json();
         profilePictureUrl = data.url;
       }
 
       await axios.patch("/users/me", {
+        username,
         fullname,
         bio,
         profilePicture: profilePictureUrl,
       });
 
       toast.success("Profile updated successfully!");
-      router.push(`/${currentUser?.username}`);
-    } catch (err: any) {
+      router.push(`/${currentUser.username}`);
+    } catch (err: unknown) {
       console.error(err);
-      toast.error(err.message || "Failed to update profile");
+      const message =
+        err instanceof Error ? err.message : "Failed to update profile";
+      toast.error(message);
     } finally {
       setUploading(false);
     }
@@ -74,7 +83,7 @@ const EditProfilePage = () => {
 
   return (
     <div className="max-w-md mx-auto mt-10 p-4 text-white">
-      <h1 className="text-2xl font-bold mb-4 text-center">Edit profile</h1>
+      <h1 className="text-2xl font-bold mb-4 text-center">Edit Profile</h1>
 
       <label
         htmlFor="file-upload"
@@ -82,7 +91,12 @@ const EditProfilePage = () => {
       >
         <div className="relative w-32 h-32 rounded-full overflow-hidden border border-gray-700">
           {previewUrl ? (
-            <Image src={previewUrl} alt="" fill className="object-cover" />
+            <Image
+              src={previewUrl}
+              alt="Profile Picture Preview"
+              fill
+              className="object-cover"
+            />
           ) : (
             <Upload className="w-12 h-12 text-gray-400 m-auto mt-10" />
           )}
@@ -117,10 +131,15 @@ const EditProfilePage = () => {
         />
       </div>
 
-      <Button onClick={handleSubmit} disabled={uploading} className="w-full mt-5 cursor-pointer">
+      <Button
+        onClick={handleSubmit}
+        disabled={uploading}
+        className="w-full mt-5 cursor-pointer"
+      >
         Save Changes
       </Button>
-      <Link href={`/${currentUser?.username}`}>
+
+      <Link href={`/${currentUser?.username || ""}`}>
         <Button className="w-full mt-5 cursor-pointer">Go Back</Button>
       </Link>
     </div>
