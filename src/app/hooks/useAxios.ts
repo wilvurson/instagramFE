@@ -5,7 +5,7 @@ export const useAxios = () => {
   const { token } = useUser();
 
   const axios = realAxios.create({
-    baseURL: "https://instagram-back-end-rxpd.onrender.com",
+    baseURL: "https://instagram-back-end-i361.onrender.com",
     headers: {
       Authorization: "Bearer " + token,
     },

@@ -21,7 +21,7 @@ const SignInPage = () => {
   }
 
   const handleSignin = async () => {
-    const response = await fetch("https://instagram-back-end-rxpd.onrender.com/signin", {
+    const response = await fetch("https://instagram-back-end-i361.onrender.com/signin", {
       headers: { "Content-Type": "application/json" },
       method: "POST",
       body: JSON.stringify({ credential, password }),

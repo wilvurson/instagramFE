@@ -17,7 +17,7 @@ export const UsersBar = () => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const res = await fetch("https://instagram-back-end-rxpd.onrender.com/users");
+        const res = await fetch("https://instagram-back-end-i361.onrender.com/users");
         if (!res.ok) throw new Error("Failed to fetch users");
         const data = await res.json();
         setUsers(data.body || data);

@@ -27,7 +27,7 @@ export const UserContextProvider = ({ children }: React.PropsWithChildren) => {
 
   const authenticateUser = async () => {
     setLoading(true);
-    const response = await fetch("https://instagram-back-end-rxpd.onrender.com/me", {
+    const response = await fetch("https://instagram-back-end-i361.onrender.com/me", {
       headers: { Authorization: "Bearer " + token },
     });
     if (response.status !== 200) {
