@@ -72,38 +72,61 @@ const Page = () => {
   };
 
   return (
-    <div className="w-[600px] mx-auto">
+    <div className="w-full max-w-[600px] mx-auto px-4 sm:px-0">
       <div className="h-11 flex justify-between items-center border-b">
         <Link href={"/"}>
           <ChevronLeft size={24} />
         </Link>
         <div className="font-bold">New post</div>
-        <Button onClick={handleSubmit} className="font-bold text-blue-400" variant={"ghost"} disabled={uploading || !selectedFile}>
+        <Button
+          onClick={handleSubmit}
+          className="font-bold text-blue-400"
+          variant={"ghost"}
+          disabled={uploading || !selectedFile}
+        >
           {uploading ? "Uploading..." : "Share"}
         </Button>
       </div>
-      <div className="py-4 flex flex-col gap-4">
 
+      <div className="py-4 flex flex-col gap-4">
         <div className="flex flex-col gap-2">
           <label
             htmlFor="file-upload"
-            className="cursor-pointer border-2 border-dashed rounded-lg p-8 flex flex-col items-center justify-center hover:border-blue-400 transition-colors"
+            className="cursor-pointer border-2 border-dashed rounded-lg p-6 sm:p-8 flex flex-col items-center justify-center hover:border-blue-400 transition-colors"
           >
             {previewUrl ? (
-              <div className="relative w-full aspect-square">
-                <Image src={previewUrl} alt="Preview" fill className="object-contain rounded-lg" />
+              <div className="relative w-full aspect-square sm:aspect-[1/1]">
+                <Image
+                  src={previewUrl}
+                  alt="Preview"
+                  fill
+                  className="object-contain rounded-lg"
+                />
               </div>
             ) : (
               <>
-                <Upload className="w-12 h-12 text-gray-400 mb-2" />
-                <span className="text-sm text-gray-600">Click to upload image</span>
+                <Upload className="w-10 h-10 sm:w-12 sm:h-12 text-gray-400 mb-2" />
+                <span className="text-sm text-gray-600 text-center">
+                  Click to upload image
+                </span>
               </>
             )}
           </label>
-          <Input id="file-upload" type="file" accept="image/*" onChange={handleFileChange} className="hidden" />
+          <Input
+            id="file-upload"
+            type="file"
+            accept="image/*"
+            onChange={handleFileChange}
+            className="hidden"
+          />
         </div>
 
-        <Textarea value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Description..." />
+        <Textarea
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+          placeholder="Description..."
+          className="resize-none"
+        />
       </div>
     </div>
   );
