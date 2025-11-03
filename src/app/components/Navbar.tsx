@@ -67,7 +67,7 @@ export const Navbar = () => {
           >
             <Image
               src={user.profilePicture || "/default-avatar.png"}
-              alt={`${user.username}'s profile`}
+              alt=""
               width={40}
               height={40}
               className="rounded-full object-cover"
