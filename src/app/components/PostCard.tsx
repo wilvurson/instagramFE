@@ -125,6 +125,7 @@ export const PostCard = ({
   return (
     <div key={post._id} className="mt-8 text-white bg-black rounded-2xl overflow-hidden">
 
+      {/* Post Header */}
       <div className="flex items-center justify-between text-sm text-stone-300 px-4 py-3">
         <div className="flex items-center gap-2">
           <Image
@@ -164,6 +165,7 @@ export const PostCard = ({
         )}
       </div>
 
+      {/* Post Image */}
       <div className="w-full bg-black flex justify-center">
         {post.imageUrl ? (
           <img
@@ -176,6 +178,7 @@ export const PostCard = ({
         )}
       </div>
 
+      {/* Actions */}
       <div className="flex items-center px-4 py-2">
         <div
           className="hover:opacity-70 cursor-pointer transition-transform active:scale-90"
@@ -218,6 +221,7 @@ export const PostCard = ({
         </div>
       </div>
 
+      {/* Stats */}
       <div className="px-4 text-sm text-stone-300 flex justify-between">
         <div className="flex gap-4 font-medium">
           <span>{likeCount} likes</span>
@@ -229,6 +233,7 @@ export const PostCard = ({
         </div>
       </div>
 
+      {/* Description */}
       <div className="px-4 text-sm mt-1 text-stone-300">
         <Link href={`/${post.createdBy.username}`}>
           <b>{post.createdBy.username}</b>
@@ -236,8 +241,9 @@ export const PostCard = ({
         {post.description || "No description"}
       </div>
 
+      {/* Quick Comments */}
       <div className="px-4 mt-2 text-sm text-stone-300">
-        <div className="overflow-y-auto space-y-2">
+        <div className="overflow-y-auto space-y-2 max-h-[120px]">
           {comments.slice(0, totalComments).map((comment) => (
             <div key={comment._id} className="flex gap-2 items-start">
               <div className="flex-shrink-0">
@@ -277,6 +283,7 @@ export const PostCard = ({
         )}
       </div>
 
+      {/* Add Comment */}
       <div className="flex items-center border-stone-800 mt-3 px-4 py-3 border-b">
         <textarea
           value={text}
@@ -295,43 +302,27 @@ export const PostCard = ({
         )}
       </div>
 
+      {/* Mobile-Friendly Comments Modal */}
       {showAllComments && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70">
-          <div className="bg-[#161616] max-w-3xl max-h-[50vh] overflow-hidden rounded-lg p-4 flex flex-col md:flex-row gap-x-3">
-            <div className="w-full flex justify-center items-center">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 px-2">
+          <div className="bg-[#161616] w-full max-w-md md:max-w-3xl max-h-[90vh] overflow-hidden rounded-lg flex flex-col md:flex-row">
+            
+            {/* Post Image */}
+            <div className="w-full md:w-1/2 flex justify-center items-center p-2 md:p-4">
               {post.imageUrl ? (
                 <img
                   src={post.imageUrl}
                   alt="Post image"
-                  className="max-h-[70vh] w-auto object-contain rounded-lg"
+                  className="max-h-[60vh] w-auto object-contain rounded-lg"
                 />
               ) : (
-                <div className="text-stone-500 p-4">nothing to show you buddy</div>
+                <div className="text-stone-500 p-4">No image to show</div>
               )}
             </div>
 
+            {/* Comments Section */}
             <div className="md:w-1/2 w-full flex flex-col">
-              <div className="flex items-center gap-2 text-sm text-stone-300 mb-3 px-2 py-1 border-b border-stone-700">
-                <Image
-                  src={post.createdBy.profilePicture || "/default-avatar.png"}
-                  alt={post.createdBy.username}
-                  width={40}
-                  height={40}
-                  className="rounded-full object-cover"
-                />
-                <div>
-                  <Link href={`/${post.createdBy.username}`}>
-                    <span className="font-semibold hover:underline">
-                      {post.createdBy.username}
-                    </span>
-                  </Link>
-                  <div className="text-stone-500 text-xs">
-                    {dayjs(post.createdAt).fromNow()}
-                  </div>
-                </div>
-              </div>
-
-              <div className="flex-1 overflow-y-auto scrollbar-none px-2 py-2 space-y-3 max-h-[60vh]">
+              <div className="flex-1 overflow-y-auto p-2 space-y-3 max-h-[70vh]">
                 {comments.map((comment) => (
                   <div key={comment._id} className="flex gap-2 items-start">
                     <div className="flex-shrink-0">
@@ -366,26 +357,25 @@ export const PostCard = ({
                 ))}
               </div>
 
-              <div className="px-2 py-2 border-t border-stone-700 flex justify-between">
-                <div className="flex items-center border-stone-800 px-4 py-3">
-                  <textarea
-                    value={text}
-                    onChange={(e) => setText(e.target.value)}
-                    placeholder="Add a comment..."
-                    className="flex-1 resize-none text-sm text-white placeholder-stone-500 focus:outline-none"
-                    rows={1}
-                  />
-                  {text.length > 0 && (
-                    <div
-                      onClick={handleSubmitComment}
-                      className="text-stone-400 font-semibold text-sm cursor-pointer hover:text-white"
-                    >
-                      Post
-                    </div>
-                  )}
-                </div>
+              {/* Add Comment */}
+              <div className="px-2 py-2 border-t border-stone-700 flex items-center gap-2">
+                <textarea
+                  value={text}
+                  onChange={(e) => setText(e.target.value)}
+                  placeholder="Add a comment..."
+                  className="flex-1 resize-none text-sm text-white placeholder-stone-500 focus:outline-none"
+                  rows={1}
+                />
+                {text.length > 0 && (
+                  <div
+                    onClick={handleSubmitComment}
+                    className="text-stone-400 font-semibold text-sm cursor-pointer hover:text-white"
+                  >
+                    Post
+                  </div>
+                )}
                 <button
-                  className="text-stone-400 flex flex-col justify-center hover:text-white font-medium cursor-pointer"
+                  className="text-stone-400 hover:text-white"
                   onClick={() => setShowAllComments(false)}
                 >
                   <X />
@@ -396,22 +386,21 @@ export const PostCard = ({
         </div>
       )}
 
+      {/* Delete Post Confirm */}
       {showDeleteConfirm && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70">
           <div className="bg-[#161616] rounded-lg p-6 w-80 flex flex-col gap-4">
-            <div className="text-stone-300 text-center text-sm">
-              Delete this post?
-            </div>
+            <div className="text-stone-300 text-center text-sm">Delete this post?</div>
             <div className="flex justify-between gap-4">
               <button
                 onClick={handleDeletePost}
-                className="flex-1 bg-white hover:bg-stone-300 text-black py-2 rounded font-semibold"
+                className="flex-1 bg-white hover:bg-stone-300 text-black py-2 rounded font-semibold cursor-pointer"
               >
                 Delete
               </button>
               <button
                 onClick={() => setShowDeleteConfirm(false)}
-                className="flex-1 bg-stone-700 hover:bg-stone-600 text-white py-2 rounded font-semibold"
+                className="flex-1 bg-stone-700 hover:bg-stone-600 text-white py-2 rounded font-semibold cursor-pointer"
               >
                 Cancel
               </button>
@@ -420,10 +409,10 @@ export const PostCard = ({
         </div>
       )}
 
+      {/* Delete Comment Confirm */}
       {showDeleteCommentConfirm && commentToDelete && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70">
           <div className="bg-[#161616] rounded-lg p-6 w-80 flex flex-col gap-4">
-            
             <div className="text-stone-300 text-sm border-b border-stone-700 pb-2">
               {comments
                 .filter((e) => e._id === commentToDelete)
@@ -448,19 +437,19 @@ export const PostCard = ({
                       <div>{comment.text}</div>
                     </div>
                   </div>
-                ))} 
+                ))}
             </div>
-            
+
             <div className="flex justify-between gap-4">
               <button
                 onClick={handleDeleteComment}
-                className="flex-1 bg-white hover:bg-stone-300 text-black py-2 rounded font-semibold"
+                className="flex-1 bg-white hover:bg-stone-300 text-black py-2 rounded font-semibold cursor-pointer"
               >
                 Delete
               </button>
               <button
                 onClick={() => setShowDeleteCommentConfirm(false)}
-                className="flex-1 bg-stone-700 hover:bg-stone-600 text-white py-2 rounded font-semibold"
+                className="flex-1 bg-stone-700 hover:bg-stone-600 text-white py-2 rounded font-semibold cursor-pointer"
               >
                 Cancel
               </button>
