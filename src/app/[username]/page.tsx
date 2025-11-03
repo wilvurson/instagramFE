@@ -189,7 +189,7 @@ const ProfilePage = () => {
 
       {selectedPost && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70">
-          <div className="w-[90%] max-w-xl h-auto max-h-[80vh] overflow-auto rounded-2xl">
+          <div className="w-[90%] flex max-w-xl h-auto max-h-[80vh] overflow-auto rounded-2xl">
             <PostCard
               post={selectedPost}
               onDelete={(id) => {
@@ -199,7 +199,7 @@ const ProfilePage = () => {
             />
           </div>
           <button
-            className="absolute top-5 right-5 text-stone-400 hover:text-white cursor-pointer text-2xl"
+            className=" text-stone-400 hover:text-white cursor-pointer text-2xl mb-[625px] ml-[20px]"
             onClick={() => setSelectedPost(null)}
           >
             <X />

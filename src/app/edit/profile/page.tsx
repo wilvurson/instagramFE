@@ -12,7 +12,7 @@ import { useAxios } from "../../hooks/useAxios";
 import Link from "next/link";
 
 const EditProfilePage = () => {
-  const { user: currentUser, token } = useUser();
+  const { user: currentUser } = useUser();
   const axios = useAxios();
   const router = useRouter();
 
@@ -117,11 +117,11 @@ const EditProfilePage = () => {
         />
       </div>
 
-      <Button onClick={handleSubmit} disabled={uploading} className="w-full">
-        {uploading ? "Updating..." : "Save Changes"}
+      <Button onClick={handleSubmit} disabled={uploading} className="w-full mt-5 cursor-pointer">
+        Save Changes
       </Button>
       <Link href={`/${currentUser?.username}`}>
-        <Button className="w-full mt-5">Go Back</Button>
+        <Button className="w-full mt-5 cursor-pointer">Go Back</Button>
       </Link>
     </div>
   );
