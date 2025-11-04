@@ -93,7 +93,7 @@ const EditProfilePage = () => {
           {previewUrl ? (
             <Image
               src={previewUrl}
-              alt="Profile Picture Preview"
+              alt=""
               fill
               className="object-cover"
             />

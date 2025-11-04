@@ -110,7 +110,7 @@ const ProfilePage = () => {
           <div className="flex justify-center md:block mb-2.5 md:mb-0">
             <Image
               src={profileSrc}
-              alt="Profile Picture"
+              alt=""
               width={160}
               height={160}
               className="rounded-full object-cover bg-stone-900 border-2 border-stone-600 
