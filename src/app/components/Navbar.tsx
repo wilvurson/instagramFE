@@ -139,7 +139,7 @@ export const Navbar = () => {
         </div>
 
         {searchOpen && (
-          <div className="absolute left-[100px] top-10 w-[300px] bg-[#161616] border border-stone-700 rounded-md overflow-y-auto max-h-96 p-2 z-50">
+          <div className="absolute left-[100px] top-10 w-[300px] bg-black rounded-md overflow-y-auto max-h-96 p-2 z-50">
             <input
               type="text"
               placeholder="Search users..."
@@ -152,16 +152,16 @@ export const Navbar = () => {
               <Link
                 key={u._id}
                 href={`/${u.username}`}
-                className="flex items-center gap-2 px-3 py-2 hover:bg-neutral-700 rounded"
+                className="flex items-center gap-2 px-3 py-2 hover:bg-neutral-900 rounded"
                 onClick={() => setSearchOpen(false)}
               >
                 {u.profilePicture ? (
                   <Image
                     src={u.profilePicture}
-                    alt={u.username}
-                    width={40}
-                    height={40}
-                    className="rounded-full object-cover"
+                    alt=""
+                    width={100}
+                    height={100}
+                    className="rounded-full object-cover h-11 w-11 border-2 border-stone-700"
                   />
                 ) : (
                   <div className="w-10 h-10 rounded-full bg-stone-700" />
@@ -198,7 +198,7 @@ export const Navbar = () => {
 
       {searchOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 px-2 md:hidden">
-          <div className="bg-[#161616] w-full max-w-md rounded-md p-4">
+          <div className="bg-black w-full max-w-md rounded-md p-4">
             <input
               type="text"
               placeholder="Search users..."
@@ -212,16 +212,16 @@ export const Navbar = () => {
                 <Link
                   key={u._id}
                   href={`/${u.username}`}
-                  className="flex items-center gap-2 px-3 py-2 hover:bg-neutral-700 rounded"
+                  className="flex items-center gap-2 px-3 py-2 hover:bg-neutral-900 rounded"
                   onClick={() => setSearchOpen(false)}
                 >
                   {u.profilePicture ? (
                     <Image
                       src={u.profilePicture}
-                      alt={u.username}
+                      alt=""
                       width={40}
                       height={40}
-                      className="rounded-full object-cover"
+                      className="rounded-full object-cover h-11 w-11 border-stone-700 border-2"
                     />
                   ) : (
                     <div className="w-10 h-10 rounded-full bg-stone-700" />
@@ -231,7 +231,7 @@ export const Navbar = () => {
               ))}
             </div>
             <button
-              className="mt-3 w-full bg-stone-700 hover:bg-stone-600 text-white py-2 rounded"
+              className="mt-3 w-full cursor-pointer bg-[#262626] text-white hover:bg-[#363636] py-2 rounded"
               onClick={() => setSearchOpen(false)}
             >
               Close
