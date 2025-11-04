@@ -98,7 +98,7 @@ const EditProfilePage = () => {
               className="object-cover"
             />
           ) : (
-            <Upload className="w-12 h-12 text-gray-400 m-auto mt-10" />
+            <Upload className="w-12 h-12 text-stone-400 m-auto mt-10" />
           )}
         </div>
         <Input
@@ -134,13 +134,13 @@ const EditProfilePage = () => {
       <Button
         onClick={handleSubmit}
         disabled={uploading}
-        className="w-full mt-5 cursor-pointer"
+        className="w-full mt-5 cursor-pointer bg-white text-black hover:bg-stone-200"
       >
         Save Changes
       </Button>
 
       <Link href={`/${currentUser?.username || ""}`}>
-        <Button className="w-full mt-5 cursor-pointer">Go Back</Button>
+        <Button className="w-full mt-5 cursor-pointer bg-[#262626] text-white hover:bg-[#363636]">Go Back</Button>
       </Link>
     </div>
   );

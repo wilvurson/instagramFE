@@ -83,8 +83,8 @@
   display: none;
 }
 .scrollbar-none {
-  -ms-overflow-style: none;  /* IE & Edge */
-  scrollbar-width: none;     /* Firefox */
+  -ms-overflow-style: none; /* IE & Edge */
+  scrollbar-width: none; /* Firefox */
 }
 
 /* Hide scrollbar everywhere but still allow scrolling */
@@ -93,11 +93,36 @@
   height: 0px;
 }
 
-html, body {
+html,
+body {
   scrollbar-width: none; /* Firefox */
   -ms-overflow-style: none; /* IE 10+ */
 }
 
+@keyframes rainbow {
+  0%, 100% {
+    color: #000000;
+  }
+  50% {
+    color: #ff0000;
+  }
+}
+.rainbow {
+  animation: rainbow 5s ease-in-out infinite;
+}
+
+@keyframes blue-glow {
+  0%, 100% {
+    color: #3d3aff;
+  }
+  50% {
+    color: #1e90ff;
+  }
+}
+
+.blue-glow {
+  animation: blue-glow 3s ease-in-out infinite;
+}
 
 
 .dark {

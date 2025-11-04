@@ -52,7 +52,7 @@ const SignUpPage = () => {
               className="border-2 border-stone-600"
             />
             <Input
-              placeholder="Full name..."
+              placeholder="Fullname..."
               value={fullname}
               onChange={(e) => setFullname(e.target.value)}
               className="border-2 border-stone-600"
