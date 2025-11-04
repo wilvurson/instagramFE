@@ -76,7 +76,7 @@ const SignInPage = () => {
 
             <Button
               onClick={handleSignin}
-              className="bg-stone-700 hover:bg-stone-600 mt-2"
+              className="bg-stone-700 hover:bg-stone-600 mt-2 cursor-pointer"
             >
               Login
             </Button>
@@ -85,7 +85,7 @@ const SignInPage = () => {
 
             <div className="flex justify-center gap-x-1">
               <span className="text-[10px] text-stone-500">Don&apos;t have an account?</span>
-              <Link href="/signup" className="text-[10px] text-stone-300 hover:text-white hover:underline">
+              <Link href="/signup" className="text-[10px] text-stone-300 hover:text-white hover:underline cursor-pointer">
                 Sign up
               </Link>
             </div>

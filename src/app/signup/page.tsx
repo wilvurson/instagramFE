@@ -82,7 +82,7 @@ const SignUpPage = () => {
 
             <Button
               onClick={handleSignup}
-              className="bg-stone-700 hover:bg-stone-600 mt-2"
+              className="bg-stone-700 hover:bg-stone-600 mt-2 cursor-pointer"
             >
               Sign up
             </Button>
