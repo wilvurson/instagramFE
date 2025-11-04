@@ -161,7 +161,6 @@ export const PostCard = ({
       key={post._id}
       className="mt-8 text-white bg-black overflow-hidden cursor-default"
     >
-
       <div className="flex items-center justify-between text-sm text-stone-300 px-4 py-3">
         <div className="flex items-center gap-2">
           <Image
@@ -275,11 +274,6 @@ export const PostCard = ({
       <div className="px-4 text-sm text-stone-300 flex justify-between">
         <div className="flex gap-4 font-medium">
           <span>{likeCount} likes</span>
-          <span>{comments.length} comments</span>
-          <span>{shareCount} shares</span>
-        </div>
-        <div className="flex gap-4 font-medium">
-          <span>{saveCount} saves</span>
         </div>
       </div>
 
@@ -305,7 +299,7 @@ export const PostCard = ({
                   alt={comment.createdBy.username}
                   width={25}
                   height={25}
-                  className="rounded-full object-cover"
+                  className="rounded-full object-cover w-7 h-7"
                 />
               </div>
               <div className="flex-1 text-stone-300 text-sm break-words">
@@ -364,7 +358,6 @@ export const PostCard = ({
       {showAllComments && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 px-2">
           <div className="bg-[#161616] w-full max-w-md md:max-w-3xl max-h-[90vh] overflow-hidden rounded-lg flex flex-col md:flex-row">
-
             <div className="w-full md:w-1/2 flex justify-center items-center p-2 md:p-4">
               {post.imageUrl ? (
                 <img
@@ -390,7 +383,7 @@ export const PostCard = ({
                         alt={comment.createdBy.username}
                         width={32}
                         height={32}
-                        className="rounded-full object-cover mt-1"
+                        className="rounded-full object-cover mt-1 w-7 h-7"
                       />
                     </div>
                     <div className="flex-1 text-stone-300 text-sm break-words">
@@ -438,7 +431,7 @@ export const PostCard = ({
                   </div>
                 )}
                 <button
-                  className="text-stone-400 hover:text-white"
+                  className="text-stone-400 hover:text-white cursor-pointer"
                   onClick={() => setShowAllComments(false)}
                 >
                   <X />
