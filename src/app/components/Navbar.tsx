@@ -1,9 +1,11 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
+import { useEffect, useState } from "react";
 import {
   Home,
-  Search,
+  Search as SearchIcon,
   Compass,
   Clapperboard,
   MessageCircle,
@@ -11,18 +13,80 @@ import {
   Plus,
   Instagram,
   LogOut,
+  BadgeCheck,
 } from "lucide-react";
 import { useUser } from "../providers/UserProvider";
-import Image from "next/image";
+
+interface User {
+  _id: string;
+  username: string;
+  profilePicture?: string;
+  followers?: any[];
+}
 
 export const Navbar = () => {
   const { user, setToken } = useUser();
+
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [searchText, setSearchText] = useState("");
+  const [allUsers, setAllUsers] = useState<User[]>([]);
+  const [filteredUsers, setFilteredUsers] = useState<User[]>([]);
 
   const handleLogout = () => {
     setToken(null);
     localStorage.removeItem("authToken");
     window.location.href = "/signin";
   };
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const res = await fetch(
+          "https://instagram-back-end-i361.onrender.com/users"
+        );
+        const data = await res.json();
+        setAllUsers(data.body || data);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    fetchUsers();
+  }, []);
+
+  useEffect(() => {
+    if (searchText.trim() === "") {
+      setFilteredUsers([]);
+      return;
+    }
+    const filtered = allUsers.filter((u) =>
+      u.username.toLowerCase().includes(searchText.toLowerCase())
+    );
+    setFilteredUsers(filtered);
+  }, [searchText, allUsers]);
+
+  const renderUsernameWithBadge = (u: User) => (
+    <div className="flex gap-1 items-center">
+      <b className="text-white">@{u.username}</b>
+      <span className="flex items-center gap-1">
+        {u.username === "wilvurson" && (
+          <>
+            <BadgeCheck className="w-4 h-4 blue-glow" />
+            <Heart className="w-4 h-4 blue-cyan-glow" />
+          </>
+        )}
+        {u.username === "elizxyx" && (
+          <>
+            <BadgeCheck className="w-4 h-4 blue-glow" />
+            <Heart className="w-4 h-4 blue-cyan-glow" />
+          </>
+        )}
+        {u.username !== "wilvurson" &&
+          u.username !== "elizxyx" &&
+          u.followers &&
+          u.followers.length >= 10 && <BadgeCheck className="w-4 h-4 blue-glow" />}
+      </span>
+    </div>
+  );
 
   return (
     <div>
@@ -36,7 +100,11 @@ export const Navbar = () => {
           <Link href={"/"} className="hover:opacity-70 transition-transform active:scale-90">
             <Home size={26} />
           </Link>
-          <Search size={26} className="hover:opacity-70 cursor-pointer" />
+          <SearchIcon
+            size={26}
+            className="hover:opacity-70 cursor-pointer"
+            onClick={() => setSearchOpen(!searchOpen)}
+          />
           <Compass size={26} className="hover:opacity-70 cursor-pointer" />
           <Clapperboard size={26} className="hover:opacity-70 cursor-pointer" />
           <MessageCircle size={26} className="hover:opacity-70 cursor-pointer" />
@@ -69,11 +137,49 @@ export const Navbar = () => {
         >
           <LogOut size={26} />
         </div>
+
+        {searchOpen && (
+          <div className="absolute left-[100px] top-10 w-[300px] bg-[#161616] border border-stone-700 rounded-md overflow-y-auto max-h-96 p-2 z-50">
+            <input
+              type="text"
+              placeholder="Search users..."
+              className="w-full px-3 py-1 rounded bg-neutral-900 text-white placeholder-stone-400 focus:outline-none mb-2"
+              value={searchText}
+              onChange={(e) => setSearchText(e.target.value)}
+              autoFocus
+            />
+            {filteredUsers.map((u) => (
+              <Link
+                key={u._id}
+                href={`/${u.username}`}
+                className="flex items-center gap-2 px-3 py-2 hover:bg-neutral-700 rounded"
+                onClick={() => setSearchOpen(false)}
+              >
+                {u.profilePicture ? (
+                  <Image
+                    src={u.profilePicture}
+                    alt={u.username}
+                    width={40}
+                    height={40}
+                    className="rounded-full object-cover"
+                  />
+                ) : (
+                  <div className="w-10 h-10 rounded-full bg-stone-700" />
+                )}
+                {renderUsernameWithBadge(u)}
+              </Link>
+            ))}
+          </div>
+        )}
       </div>
 
       <div className="md:hidden fixed bottom-0 left-0 w-full bg-black border-t border-neutral-800 flex justify-around items-center py-3 text-white z-50">
         <Link href={"/"}><Home size={24} /></Link>
-        <Search size={24} />
+        <SearchIcon
+          size={24}
+          onClick={() => setSearchOpen(true)}
+          className="cursor-pointer"
+        />
         <Link href={"/create"}><Plus size={28} /></Link>
         {user ? (
           <Link href={`/${user.username}`}>
@@ -88,14 +194,51 @@ export const Navbar = () => {
         ) : (
           <Link href="/login"><Heart size={24} /></Link>
         )}
-        <div
-          className="mt-auto text-red-400 cursor-pointer hover:text-red-700"
-          onClick={handleLogout}
-        >
-          <LogOut size={24} />
-        </div>
-        
       </div>
+
+      {searchOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 px-2 md:hidden">
+          <div className="bg-[#161616] w-full max-w-md rounded-md p-4">
+            <input
+              type="text"
+              placeholder="Search users..."
+              className="w-full px-3 py-2 rounded bg-neutral-900 text-white placeholder-stone-400 focus:outline-none mb-3"
+              value={searchText}
+              onChange={(e) => setSearchText(e.target.value)}
+              autoFocus
+            />
+            <div className="flex flex-col gap-2 max-h-80 overflow-y-auto">
+              {filteredUsers.map((u) => (
+                <Link
+                  key={u._id}
+                  href={`/${u.username}`}
+                  className="flex items-center gap-2 px-3 py-2 hover:bg-neutral-700 rounded"
+                  onClick={() => setSearchOpen(false)}
+                >
+                  {u.profilePicture ? (
+                    <Image
+                      src={u.profilePicture}
+                      alt={u.username}
+                      width={40}
+                      height={40}
+                      className="rounded-full object-cover"
+                    />
+                  ) : (
+                    <div className="w-10 h-10 rounded-full bg-stone-700" />
+                  )}
+                  {renderUsernameWithBadge(u)}
+                </Link>
+              ))}
+            </div>
+            <button
+              className="mt-3 w-full bg-stone-700 hover:bg-stone-600 text-white py-2 rounded"
+              onClick={() => setSearchOpen(false)}
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

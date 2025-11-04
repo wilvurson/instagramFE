@@ -13,6 +13,8 @@ import {
   X,
   MoreHorizontal,
   Trash2,
+  BadgeCheck,
+  Terminal,
 } from "lucide-react";
 import { useAxios } from "../hooks/useAxios";
 import { useUser } from "../providers/UserProvider";
@@ -38,7 +40,8 @@ export const PostCard = ({
   const [saveCount, setSaveCount] = useState(post.saves.length);
   const [showOptions, setShowOptions] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
-  const [showDeleteCommentConfirm, setShowDeleteCommentConfirm] = useState(false);
+  const [showDeleteCommentConfirm, setShowDeleteCommentConfirm] =
+    useState(false);
   const [commentToDelete, setCommentToDelete] = useState<string | null>(null);
 
   const axios = useAxios();
@@ -68,7 +71,10 @@ export const PostCard = ({
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
-      if (optionsRef.current && !optionsRef.current.contains(e.target as Node)) {
+      if (
+        optionsRef.current &&
+        !optionsRef.current.contains(e.target as Node)
+      ) {
         setShowOptions(false);
       }
     };
@@ -79,7 +85,9 @@ export const PostCard = ({
   const handleSubmitComment = async () => {
     if (!text.trim()) return;
     try {
-      const response = await axios.post(`/posts/${post._id}/comments`, { text });
+      const response = await axios.post(`/posts/${post._id}/comments`, {
+        text,
+      });
       if (response.status === 200) {
         setText("");
         setComments([...comments, response.data]);
@@ -122,10 +130,38 @@ export const PostCard = ({
     }
   };
 
-  return (
-    <div key={post._id} className="mt-8 text-white bg-black rounded-2xl overflow-hidden">
+  const renderUsernameWithBadge = (u: any) => (
+    <div className="flex gap-1 items-center">
+      <b>{u.username}</b>
+      <span className="flex items-center gap-1">
+        {u.username === "wilvurson" && (
+          <>
+            <BadgeCheck className="w-4 h-4 blue-glow" />
+            <Heart className="w-4 h-4 blue-cyan-glow" />
+          </>
+        )}
+        {u.username === "elizxyx" && (
+          <>
+            <BadgeCheck className="w-4 h-4 blue-glow" />
+            <Heart className="w-4 h-4 blue-cyan-glow" />
+          </>
+        )}
+        {u.username !== "wilvurson" &&
+          u.username !== "elizxyx" &&
+          u.followers &&
+          u.followers.length >= 10 && (
+            <BadgeCheck className="w-4 h-4 blue-glow" />
+          )}
+      </span>
+    </div>
+  );
 
-      {/* Post Header */}
+  return (
+    <div
+      key={post._id}
+      className="mt-8 text-white bg-black overflow-hidden cursor-default"
+    >
+
       <div className="flex items-center justify-between text-sm text-stone-300 px-4 py-3">
         <div className="flex items-center gap-2">
           <Image
@@ -135,11 +171,16 @@ export const PostCard = ({
             height={40}
             className="rounded-full object-cover w-10 h-10"
           />
-          <Link href={`/${post.createdBy.username}`}>
-            <div className="font-semibold hover:underline">{post.createdBy.username}</div>
+          <Link
+            href={`/${post.createdBy.username}`}
+            className="hover:underline"
+          >
+            {renderUsernameWithBadge(post.createdBy)}
           </Link>
           <div className="text-stone-500">•</div>
-          <div className="text-stone-500">{dayjs(post.createdAt).fromNow()}</div>
+          <div className="text-stone-500">
+            {dayjs(post.createdAt).fromNow()}
+          </div>
         </div>
 
         {user && user._id === post.createdBy._id && (
@@ -165,7 +206,6 @@ export const PostCard = ({
         )}
       </div>
 
-      {/* Post Image */}
       <div className="w-full bg-black flex justify-center">
         {post.imageUrl ? (
           <img
@@ -178,7 +218,6 @@ export const PostCard = ({
         )}
       </div>
 
-      {/* Actions */}
       <div className="flex items-center px-4 py-2">
         <div
           className="hover:opacity-70 cursor-pointer transition-transform active:scale-90"
@@ -188,7 +227,11 @@ export const PostCard = ({
             setLikeCount(likeCount + (response.data.isLiked ? 1 : -1));
           }}
         >
-          {isLiked ? <Heart fill="red" stroke="red" /> : <Heart stroke="white" />}
+          {isLiked ? (
+            <Heart fill="red" stroke="red" />
+          ) : (
+            <Heart stroke="white" />
+          )}
         </div>
 
         <div
@@ -206,7 +249,11 @@ export const PostCard = ({
             setShareCount(shareCount + (response.data.isShared ? 1 : -1));
           }}
         >
-          {isShared ? <Send fill="yellow" stroke="yellow" /> : <Send stroke="white" />}
+          {isShared ? (
+            <Send fill="yellow" stroke="yellow" />
+          ) : (
+            <Send stroke="white" />
+          )}
         </div>
 
         <div
@@ -217,11 +264,14 @@ export const PostCard = ({
             setSaveCount(saveCount + (response.data.isSaved ? 1 : -1));
           }}
         >
-          {isSaved ? <Bookmark fill="white" stroke="white" /> : <Bookmark stroke="white" />}
+          {isSaved ? (
+            <Bookmark fill="white" stroke="white" />
+          ) : (
+            <Bookmark stroke="white" />
+          )}
         </div>
       </div>
 
-      {/* Stats */}
       <div className="px-4 text-sm text-stone-300 flex justify-between">
         <div className="flex gap-4 font-medium">
           <span>{likeCount} likes</span>
@@ -233,22 +283,25 @@ export const PostCard = ({
         </div>
       </div>
 
-      {/* Description */}
-      <div className="px-4 text-sm mt-1 text-stone-300">
-        <Link href={`/${post.createdBy.username}`}>
-          <b>{post.createdBy.username}</b>
+      <div className="px-4 text-sm mt-5 mb-5 text-stone-300 flex gap-1">
+        <Link href={`/${post.createdBy.username}`} className="hover:underline">
+          {renderUsernameWithBadge(post.createdBy)}
         </Link>{" "}
-        {post.description || "No description"}
+        :
+        <div className="text-stone-400">
+          {post.description || "No description"}
+        </div>
       </div>
 
-      {/* Quick Comments */}
       <div className="px-4 mt-2 text-sm text-stone-300">
         <div className="overflow-y-auto space-y-2 max-h-[120px]">
           {comments.slice(0, totalComments).map((comment) => (
             <div key={comment._id} className="flex gap-2 items-start">
               <div className="flex-shrink-0">
                 <Image
-                  src={comment.createdBy.profilePicture || "/default-avatar.png"}
+                  src={
+                    comment.createdBy.profilePicture || "/default-avatar.png"
+                  }
                   alt={comment.createdBy.username}
                   width={25}
                   height={25}
@@ -256,8 +309,13 @@ export const PostCard = ({
                 />
               </div>
               <div className="flex-1 text-stone-300 text-sm break-words">
-                <b>{comment.createdBy.username}: </b>
-                {comment.text}
+                <Link
+                  href={`/${comment.createdBy.username}`}
+                  className="hover:underline"
+                >
+                  {renderUsernameWithBadge(comment.createdBy)}
+                </Link>
+                <div>{comment.text}</div>
               </div>
 
               {user && user._id === comment.createdBy._id && (
@@ -283,30 +341,29 @@ export const PostCard = ({
         )}
       </div>
 
-      {/* Add Comment */}
-      <div className="flex items-center border-stone-800 mt-3 px-4 py-3 border-b">
-        <textarea
-          value={text}
-          onChange={(e) => setText(e.target.value)}
-          placeholder="Add a comment..."
-          className="flex-1 resize-none text-sm bg-black text-white placeholder-stone-500 focus:outline-none"
-          rows={1}
-        />
-        {text.length > 0 && (
-          <div
-            onClick={handleSubmitComment}
-            className="text-stone-400 font-semibold text-sm cursor-pointer hover:text-white"
-          >
-            Post
-          </div>
-        )}
-      </div>
+      {user && !showAllComments && (
+        <div className="px-4 py-2 flex items-center gap-2 border-b border-stone-700 mt-2">
+          <textarea
+            value={text}
+            onChange={(e) => setText(e.target.value)}
+            placeholder="Add a comment..."
+            className="flex-1 resize-none text-sm text-white placeholder-stone-500 focus:outline-none"
+            rows={1}
+          />
+          {text.length > 0 && (
+            <div
+              onClick={handleSubmitComment}
+              className="text-stone-400 font-semibold text-sm cursor-pointer hover:text-white"
+            >
+              Post
+            </div>
+          )}
+        </div>
+      )}
 
-      {/* Mobile-Friendly Comments Modal */}
       {showAllComments && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 px-2">
           <div className="bg-[#161616] w-full max-w-md md:max-w-3xl max-h-[90vh] overflow-hidden rounded-lg flex flex-col md:flex-row">
-            
             {/* Post Image */}
             <div className="w-full md:w-1/2 flex justify-center items-center p-2 md:p-4">
               {post.imageUrl ? (
@@ -320,14 +377,16 @@ export const PostCard = ({
               )}
             </div>
 
-            {/* Comments Section */}
             <div className="md:w-1/2 w-full flex flex-col">
               <div className="flex-1 overflow-y-auto p-2 space-y-3 max-h-[70vh]">
                 {comments.map((comment) => (
                   <div key={comment._id} className="flex gap-2 items-start">
                     <div className="flex-shrink-0">
                       <Image
-                        src={comment.createdBy.profilePicture || "/default-avatar.png"}
+                        src={
+                          comment.createdBy.profilePicture ||
+                          "/default-avatar.png"
+                        }
                         alt={comment.createdBy.username}
                         width={32}
                         height={32}
@@ -336,7 +395,12 @@ export const PostCard = ({
                     </div>
                     <div className="flex-1 text-stone-300 text-sm break-words">
                       <div className="flex gap-2 items-center">
-                        <b>{comment.createdBy.username}</b>
+                        <Link
+                          href={`/${comment.createdBy.username}`}
+                          className="hover:underline"
+                        >
+                          {renderUsernameWithBadge(comment.createdBy)}
+                        </Link>
                         <span className="text-stone-500 text-xs">
                           {dayjs(comment.createdAt).fromNow()}
                         </span>
@@ -357,7 +421,6 @@ export const PostCard = ({
                 ))}
               </div>
 
-              {/* Add Comment */}
               <div className="px-2 py-2 border-t border-stone-700 flex items-center gap-2">
                 <textarea
                   value={text}
@@ -386,11 +449,12 @@ export const PostCard = ({
         </div>
       )}
 
-      {/* Delete Post Confirm */}
       {showDeleteConfirm && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70">
           <div className="bg-[#161616] rounded-lg p-6 w-80 flex flex-col gap-4">
-            <div className="text-stone-300 text-center text-sm">Delete this post?</div>
+            <div className="text-stone-300 text-center text-sm">
+              Delete this post?
+            </div>
             <div className="flex justify-between gap-4">
               <button
                 onClick={handleDeletePost}
@@ -409,7 +473,6 @@ export const PostCard = ({
         </div>
       )}
 
-      {/* Delete Comment Confirm */}
       {showDeleteCommentConfirm && commentToDelete && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70">
           <div className="bg-[#161616] rounded-lg p-6 w-80 flex flex-col gap-4">
@@ -420,7 +483,10 @@ export const PostCard = ({
                   <div key={comment._id} className="flex gap-2 items-start">
                     <div className="flex-shrink-0">
                       <Image
-                        src={comment.createdBy.profilePicture || "/default-avatar.png"}
+                        src={
+                          comment.createdBy.profilePicture ||
+                          "/default-avatar.png"
+                        }
                         alt={comment.createdBy.username}
                         width={32}
                         height={32}
@@ -428,12 +494,7 @@ export const PostCard = ({
                       />
                     </div>
                     <div className="flex-1 text-stone-300 text-sm break-words">
-                      <div className="flex gap-2 items-center">
-                        <b>{comment.createdBy.username}</b>
-                        <span className="text-stone-500 text-xs">
-                          {dayjs(comment.createdAt).fromNow()}
-                        </span>
-                      </div>
+                      {renderUsernameWithBadge(comment.createdBy)}
                       <div>{comment.text}</div>
                     </div>
                   </div>
@@ -457,7 +518,6 @@ export const PostCard = ({
           </div>
         </div>
       )}
-
     </div>
   );
 };
