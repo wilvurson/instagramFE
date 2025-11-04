@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
@@ -25,7 +25,6 @@ const EditProfilePage = () => {
   );
   const [uploading, setUploading] = useState<boolean>(false);
 
-  // Handle file input changes
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -39,7 +38,6 @@ const EditProfilePage = () => {
     reader.readAsDataURL(file);
   };
 
-  // Handle profile update
   const handleSubmit = async () => {
     if (!currentUser) return;
 

@@ -364,7 +364,7 @@ export const PostCard = ({
       {showAllComments && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 px-2">
           <div className="bg-[#161616] w-full max-w-md md:max-w-3xl max-h-[90vh] overflow-hidden rounded-lg flex flex-col md:flex-row">
-            {/* Post Image */}
+
             <div className="w-full md:w-1/2 flex justify-center items-center p-2 md:p-4">
               {post.imageUrl ? (
                 <img

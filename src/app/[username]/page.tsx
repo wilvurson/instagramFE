@@ -126,7 +126,7 @@ const ProfilePage = () => {
                   {user?.username === "wilvurson" && (
                     <>
                       <BadgeCheck className="w-5 h-5 md:w-6 md:h-6 blue-glow" />
-                      <Terminal className="w-5 h-5 md:w-6 md:h-6 red-glow" />
+                      <Heart className="w-5 h-5 md:w-6 md:h-6 blue-cyan-glow" />
                     </>
                   )}
 
