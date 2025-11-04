@@ -107,7 +107,6 @@ const ProfilePage = () => {
 
       <div className="w-full flex justify-center pt-6 md:pt-10 px-4">
         <div className="flex flex-col md:flex-row md:items-center md:gap-10 mb-3 md:mb-8">
-
           <div className="flex justify-center md:block mb-2.5 md:mb-0">
             <Image
               src={profileSrc}
@@ -123,23 +122,27 @@ const ProfilePage = () => {
             <div className="flex items-center justify-center md:justify-start gap-1.5 md:gap-2 mb-1.5 md:mb-4">
               <h1 className="text-xl font-semibold flex items-center gap-1.5">
                 {user?.username}
-
-                {user?.username === "wilvurson" ? (
-                  <span className="flex items-center gap-1">
-
-                    {followerCount >= 0 && (
+                <span className="flex items-center gap-1">
+                  {user?.username === "wilvurson" && (
+                    <>
                       <BadgeCheck className="w-5 h-5 md:w-6 md:h-6 blue-glow" />
+                      <Terminal className="w-5 h-5 md:w-6 md:h-6 red-glow" />
+                    </>
+                  )}
+
+                  {user?.username === "elizxyx" && (
+                    <>
+                      <BadgeCheck className="w-5 h-5 md:w-6 md:h-6 blue-glow" />
+                      <Heart className="w-5 h-5 md:w-6 md:h-6 blue-cyan-glow" />
+                    </>
+                  )}
+
+                  {user?.username !== "wilvurson" &&
+                    user?.username !== "elizxyx" &&
+                    followerCount >= 10 && (
+                      <BadgeCheck className="w-5 h-5 md:w-6 md:h-6 text-black fill-sky-500" />
                     )}
-
-                    <Terminal className="w-5 h-5 md:w-6 md:h-6 rainbow" />
-
-                    
-                  </span>
-                ) : (
-                  followerCount >= 10 && (
-                    <BadgeCheck className="w-5 h-5 md:w-6 md:h-6 text-black fill-sky-500" />
-                  )
-                )}
+                </span>
               </h1>
             </div>
 
