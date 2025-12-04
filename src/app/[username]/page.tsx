@@ -16,7 +16,6 @@ import {
   Heart,
   MessageCircle,
   Send,
-  Terminal,
 } from "lucide-react";
 import { PostCard } from "../components/PostCard";
 

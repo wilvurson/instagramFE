@@ -19,7 +19,7 @@ export const UsersBar = () => {
     const fetchUsers = async () => {
       try {
         const res = await fetch(
-          "https://instagram-back-end-i361.onrender.com/users"
+          "https://instagram-back-end.vercel.app/users"
         );
         if (!res.ok) throw new Error("Failed to fetch users");
         const data = await res.json();

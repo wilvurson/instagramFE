@@ -32,7 +32,7 @@ export const PostCard = ({
 }) => {
   const [isLiked, setIsLiked] = useState(false);
   const [likeCount, setLikeCount] = useState(post.likes.length);
-  const [totalComments, setTotalComments] = useState(3);
+  const [totalComments] = useState(1);
   const [showAllComments, setShowAllComments] = useState(false);
   const [isShared, setIsShared] = useState(false);
   const [shareCount, setShareCount] = useState(post.shares.length);
@@ -68,19 +68,6 @@ export const PostCard = ({
       setIsSaved(post.saves.some((save) => save.createdBy._id === userId));
     }
   }, [user]);
-
-  useEffect(() => {
-    const handleClickOutside = (e: MouseEvent) => {
-      if (
-        optionsRef.current &&
-        !optionsRef.current.contains(e.target as Node)
-      ) {
-        setShowOptions(false);
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
 
   const handleSubmitComment = async () => {
     if (!text.trim()) return;

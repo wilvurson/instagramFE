@@ -15,7 +15,7 @@ const SignUpPage = () => {
   const [username, setUsername] = useState("");
 
   const handleSignup = async () => {
-    const response = await fetch("https://instagram-back-end-i361.onrender.com/signup", {
+    const response = await fetch("https://instagram-back-end.vercel.app/signup", {
       headers: {
         "Content-Type": "application/json",
       },

@@ -42,7 +42,7 @@ export const Navbar = () => {
     const fetchUsers = async () => {
       try {
         const res = await fetch(
-          "https://instagram-back-end-i361.onrender.com/users"
+          "https://instagram-back-end.vercel.app/users"
         );
         const data = await res.json();
         setAllUsers(data.body || data);
