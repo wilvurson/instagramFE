@@ -46,7 +46,7 @@ export const PUT = async (req: NextRequest) => {
   }
 };
 
-export const DELELTE = async (req: NextRequest) => {
+export const DELETE = async (req: NextRequest) => {
   try {
     
     const { id } = await req.json()
