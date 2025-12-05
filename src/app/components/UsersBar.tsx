@@ -73,7 +73,7 @@ export const UsersBar = () => {
                   </>
                 )}
 
-                {user.username === "elizxyx" && (
+                {user.username === "elvur" && (
                   <>
                     <BadgeCheck className="w-4 h-4 blue-glow" />
                     <Heart className="w-4 h-4 blue-cyan-glow" />
@@ -81,7 +81,7 @@ export const UsersBar = () => {
                 )}
 
                 {user.username !== "wilvurson" &&
-                  user.username !== "elizxyx" &&
+                  user.username !== "elvur" &&
                   user.followers &&
                   user.followers.length >= 10 && (
                     <BadgeCheck className="w-4 h-4 blue-glow" />

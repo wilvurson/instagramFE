@@ -72,14 +72,14 @@ export const Navbar = () => {
             <Heart className="w-4 h-4 blue-cyan-glow" />
           </>
         )}
-        {u.username === "elizxyx" && (
+        {u.username === "elvur" && (
           <>
             <BadgeCheck className="w-4 h-4 blue-glow" />
             <Heart className="w-4 h-4 blue-cyan-glow" />
           </>
         )}
         {u.username !== "wilvurson" &&
-          u.username !== "elizxyx" &&
+          u.username !== "elvur" &&
           u.followers &&
           u.followers.length >= 10 && (
             <BadgeCheck className="w-4 h-4 blue-glow" />

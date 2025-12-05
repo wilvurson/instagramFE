@@ -129,7 +129,7 @@ const ProfilePage = () => {
                     </>
                   )}
 
-                  {user?.username === "elizxyx" && (
+                  {user?.username === "elvur" && (
                     <>
                       <BadgeCheck className="w-5 h-5 md:w-6 md:h-6 blue-glow" />
                       <Heart className="w-5 h-5 md:w-6 md:h-6 blue-cyan-glow" />
@@ -137,7 +137,7 @@ const ProfilePage = () => {
                   )}
 
                   {user?.username !== "wilvurson" &&
-                    user?.username !== "elizxyx" &&
+                    user?.username !== "elvur" &&
                     followerCount >= 10 && (
                       <BadgeCheck className="w-5 h-5 md:w-6 md:h-6 text-black fill-sky-500" />
                     )}
