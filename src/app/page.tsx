@@ -13,7 +13,7 @@ export default function Home() {
   const { user, loading } = useContext(UserContext);
 
   useEffect(() => {
-    fetch("http://localhost:5500/posts")
+    fetch("https://instagram-back-end.vercel.app/posts")
       .then((res) => res.json())
       .then((data) => {
         const shuffledPosts = [...data];

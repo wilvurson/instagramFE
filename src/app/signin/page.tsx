@@ -21,11 +21,14 @@ const SignInPage = () => {
   }
 
   const handleSignin = async () => {
-    const response = await fetch("http://localhost:5500/signin", {
-      headers: { "Content-Type": "application/json" },
-      method: "POST",
-      body: JSON.stringify({ credential, password }),
-    });
+    const response = await fetch(
+      "https://instagram-back-end.vercel.app/signin",
+      {
+        headers: { "Content-Type": "application/json" },
+        method: "POST",
+        body: JSON.stringify({ credential, password }),
+      }
+    );
 
     const data = await response.json();
 

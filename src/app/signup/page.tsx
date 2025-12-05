@@ -15,13 +15,16 @@ const SignUpPage = () => {
   const [username, setUsername] = useState("");
 
   const handleSignup = async () => {
-    const response = await fetch("http://localhost:5500/signup", {
-      headers: {
-        "Content-Type": "application/json",
-      },
-      method: "POST",
-      body: JSON.stringify({ credential, password, fullname, username }),
-    });
+    const response = await fetch(
+      "https://instagram-back-end.vercel.app/signup",
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        method: "POST",
+        body: JSON.stringify({ credential, password, fullname, username }),
+      }
+    );
 
     const data = await response.json();
 

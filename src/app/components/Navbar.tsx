@@ -41,7 +41,7 @@ export const Navbar = () => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const res = await fetch("http://localhost:5500/users");
+        const res = await fetch("https://instagram-back-end.vercel.app/users");
         const data = await res.json();
         setAllUsers(data.body || data);
       } catch (err) {
