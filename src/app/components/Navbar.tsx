@@ -41,9 +41,7 @@ export const Navbar = () => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const res = await fetch(
-          "https://instagram-back-end.vercel.app/users"
-        );
+        const res = await fetch("http://localhost:5500/users");
         const data = await res.json();
         setAllUsers(data.body || data);
       } catch (err) {
@@ -83,21 +81,25 @@ export const Navbar = () => {
         {u.username !== "wilvurson" &&
           u.username !== "elizxyx" &&
           u.followers &&
-          u.followers.length >= 10 && <BadgeCheck className="w-4 h-4 blue-glow" />}
+          u.followers.length >= 10 && (
+            <BadgeCheck className="w-4 h-4 blue-glow" />
+          )}
       </span>
     </div>
   );
 
   return (
     <div>
-
       <div className="hidden md:flex fixed left-0 top-0 h-full w-[80px] bg-black border-r border-neutral-800 flex-col justify-between items-center py-4 text-white">
         <Link href={"/"} className="mb-15 mt-5">
           <Instagram />
         </Link>
 
         <div className="flex flex-col gap-6 items-center">
-          <Link href={"/"} className="hover:opacity-70 transition-transform active:scale-90">
+          <Link
+            href={"/"}
+            className="hover:opacity-70 transition-transform active:scale-90"
+          >
             <Home size={26} />
           </Link>
           <SearchIcon
@@ -107,9 +109,15 @@ export const Navbar = () => {
           />
           <Compass size={26} className="hover:opacity-70 cursor-pointer" />
           <Clapperboard size={26} className="hover:opacity-70 cursor-pointer" />
-          <MessageCircle size={26} className="hover:opacity-70 cursor-pointer" />
+          <MessageCircle
+            size={26}
+            className="hover:opacity-70 cursor-pointer"
+          />
           <Heart size={26} className="hover:opacity-70 cursor-pointer" />
-          <Link href={"/create"} className="hover:opacity-70 transition-transform active:scale-90">
+          <Link
+            href={"/create"}
+            className="hover:opacity-70 transition-transform active:scale-90"
+          >
             <Plus size={30} />
           </Link>
 
@@ -174,13 +182,17 @@ export const Navbar = () => {
       </div>
 
       <div className="md:hidden fixed bottom-0 left-0 w-full bg-black border-t border-neutral-800 flex justify-around items-center py-3 text-white z-50">
-        <Link href={"/"}><Home size={24} /></Link>
+        <Link href={"/"}>
+          <Home size={24} />
+        </Link>
         <SearchIcon
           size={24}
           onClick={() => setSearchOpen(true)}
           className="cursor-pointer"
         />
-        <Link href={"/create"}><Plus size={28} /></Link>
+        <Link href={"/create"}>
+          <Plus size={28} />
+        </Link>
         {user ? (
           <Link href={`/${user.username}`}>
             <Image
@@ -192,7 +204,9 @@ export const Navbar = () => {
             />
           </Link>
         ) : (
-          <Link href="/login"><Heart size={24} /></Link>
+          <Link href="/login">
+            <Heart size={24} />
+          </Link>
         )}
       </div>
 

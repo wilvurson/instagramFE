@@ -21,7 +21,7 @@ const SignInPage = () => {
   }
 
   const handleSignin = async () => {
-    const response = await fetch("https://instagram-back-end.vercel.app/signin", {
+    const response = await fetch("http://localhost:5500/signin", {
       headers: { "Content-Type": "application/json" },
       method: "POST",
       body: JSON.stringify({ credential, password }),
@@ -84,8 +84,13 @@ const SignInPage = () => {
             <div className="border-b-2 border-stone-700 rounded-2xl my-4"></div>
 
             <div className="flex justify-center gap-x-1">
-              <span className="text-[10px] text-stone-500">Don&apos;t have an account?</span>
-              <Link href="/signup" className="text-[10px] text-stone-300 hover:text-white hover:underline cursor-pointer">
+              <span className="text-[10px] text-stone-500">
+                Don&apos;t have an account?
+              </span>
+              <Link
+                href="/signup"
+                className="text-[10px] text-stone-300 hover:text-white hover:underline cursor-pointer"
+              >
                 Sign up
               </Link>
             </div>

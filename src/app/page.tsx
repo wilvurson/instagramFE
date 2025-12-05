@@ -13,18 +13,20 @@ export default function Home() {
   const { user, loading } = useContext(UserContext);
 
   useEffect(() => {
-  fetch("https://instagram-back-end.vercel.app/posts")
-    .then((res) => res.json())
-    .then((data) => {
-      const shuffledPosts = [...data];
-      for (let i = shuffledPosts.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [shuffledPosts[i], shuffledPosts[j]] = [shuffledPosts[j], shuffledPosts[i]];
-      }
-      setPosts(shuffledPosts);
-    });
-}, []);
-
+    fetch("http://localhost:5500/posts")
+      .then((res) => res.json())
+      .then((data) => {
+        const shuffledPosts = [...data];
+        for (let i = shuffledPosts.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [shuffledPosts[i], shuffledPosts[j]] = [
+            shuffledPosts[j],
+            shuffledPosts[i],
+          ];
+        }
+        setPosts(shuffledPosts);
+      });
+  }, []);
 
   if (loading) return <>Loading....</>;
   if (!user) return redirect("/signin");
