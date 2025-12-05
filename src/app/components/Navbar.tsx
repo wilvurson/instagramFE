@@ -16,6 +16,9 @@ import {
   BadgeCheck,
 } from "lucide-react";
 import { useUser } from "../providers/UserProvider";
+import { useAxios } from "../hooks/useAxios";
+import { Message } from "../types";
+import { MessageCard } from "./MessageCard";
 
 interface User {
   _id: string;
@@ -31,6 +34,11 @@ export const Navbar = () => {
   const [searchText, setSearchText] = useState("");
   const [allUsers, setAllUsers] = useState<User[]>([]);
   const [filteredUsers, setFilteredUsers] = useState<User[]>([]);
+  const [messagesOpen, setMessagesOpen] = useState(false);
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [messageText, setMessageText] = useState("");
+  const [posting, setPosting] = useState(false);
+  const axios = useAxios();
 
   const handleLogout = () => {
     setToken(null);
@@ -61,6 +69,38 @@ export const Navbar = () => {
     );
     setFilteredUsers(filtered);
   }, [searchText, allUsers]);
+
+  useEffect(() => {
+    if (messagesOpen) {
+      fetchMessages();
+    }
+  }, [messagesOpen]);
+
+  const fetchMessages = async () => {
+    try {
+      const res = await fetch("https://instagram-back-end.vercel.app/messages");
+      const data = await res.json();
+      setMessages(data);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const handlePostMessage = async () => {
+    if (!messageText.trim()) return;
+    try {
+      setPosting(true);
+      const response = await axios.post("/messages", { text: messageText });
+      if (response.status === 200) {
+        setMessageText("");
+        fetchMessages(); // Refresh messages
+      }
+    } catch (error) {
+      console.error("Error posting message:", error);
+    } finally {
+      setPosting(false);
+    }
+  };
 
   const renderUsernameWithBadge = (u: User) => (
     <div className="flex gap-1 items-center">
@@ -112,6 +152,7 @@ export const Navbar = () => {
           <MessageCircle
             size={26}
             className="hover:opacity-70 cursor-pointer"
+            onClick={() => setMessagesOpen(true)}
           />
           <Heart size={26} className="hover:opacity-70 cursor-pointer" />
           <Link
@@ -193,6 +234,11 @@ export const Navbar = () => {
         <Link href={"/create"}>
           <Plus size={28} />
         </Link>
+        <MessageCircle
+          size={24}
+          className="cursor-pointer"
+          onClick={() => setMessagesOpen(true)}
+        />
         {user ? (
           <Link href={`/${user.username}`}>
             <Image
@@ -250,6 +296,53 @@ export const Navbar = () => {
             >
               Close
             </button>
+          </div>
+        </div>
+      )}
+
+      {messagesOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 px-2">
+          <div className="bg-black w-full max-w-md rounded-md p-4 max-h-[90vh] flex flex-col">
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-xl font-bold text-white">Global Chat</h2>
+              <button
+                onClick={() => setMessagesOpen(false)}
+                className="text-stone-400 hover:text-white"
+              >
+                ✕
+              </button>
+            </div>
+
+            <div className="flex-1 overflow-y-auto space-y-4 mb-4">
+              {messages.map((message) => (
+                <MessageCard
+                  key={message._id}
+                  message={message}
+                  onDelete={(id) =>
+                    setMessages(messages.filter((m) => m._id !== id))
+                  }
+                />
+              ))}
+            </div>
+
+            <div className="border-t border-stone-700 pt-4">
+              <div className="flex items-center gap-2">
+                <textarea
+                  value={messageText}
+                  onChange={(e) => setMessageText(e.target.value)}
+                  placeholder="Type a message..."
+                  className="flex-1 resize-none text-sm text-white placeholder-stone-500 focus:outline-none bg-stone-900 rounded px-3 py-2"
+                  rows={2}
+                />
+                <button
+                  onClick={handlePostMessage}
+                  disabled={posting || !messageText.trim()}
+                  className="bg-blue-500 hover:bg-blue-600 disabled:bg-stone-600 text-white px-4 py-2 rounded font-semibold"
+                >
+                  {posting ? "..." : "Send"}
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       )}

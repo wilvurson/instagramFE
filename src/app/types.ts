@@ -57,3 +57,43 @@ export type Post = {
   shares: PostShare[];
   saves: PostSave[];
 };
+
+export type MessageComment = {
+  _id: string;
+  text: string;
+  createdAt: string;
+  createdBy: User;
+};
+
+export type MessageLike = {
+  _id: string;
+  createdAt: string;
+  createdBy: User;
+};
+
+export type MessageShare = {
+  _id: string;
+  createdAt: string;
+  createdBy: User;
+};
+
+export type MessageSave = {
+  _id: string;
+  createdAt: string;
+  createdBy: User;
+};
+
+export type Message = {
+  commentCount: number;
+  shareCount: number;
+  likesCount: number;
+  username: string;
+  _id: string;
+  text: string;
+  createdAt: string;
+  createdBy: User;
+  comments: MessageComment[];
+  likes: MessageLike[];
+  shares: MessageShare[];
+  saves: MessageSave[];
+};

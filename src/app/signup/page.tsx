@@ -9,12 +9,19 @@ import Link from "next/link";
 
 const SignUpPage = () => {
   const [passwordShown, setPasswordShown] = useState(false);
+  const [confirmPasswordShown, setConfirmPasswordShown] = useState(false);
   const [credential, setCredential] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [fullname, setFullname] = useState("");
   const [username, setUsername] = useState("");
 
   const handleSignup = async () => {
+    if (password !== confirmPassword) {
+      toast.error("Passwords do not match");
+      return;
+    }
+
     const response = await fetch(
       "https://instagram-back-end.vercel.app/signup",
       {
@@ -80,6 +87,22 @@ const SignUpPage = () => {
                 className="absolute right-0 top-0 hover:bg-black/20 hover:text-white"
               >
                 {passwordShown ? <Eye /> : <EyeClosed />}
+              </Button>
+            </div>
+            <div className="relative">
+              <Input
+                placeholder="Confirm Password..."
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                type={confirmPasswordShown ? "text" : "password"}
+                className="border-2 border-stone-600"
+              />
+              <Button
+                onClick={() => setConfirmPasswordShown(!confirmPasswordShown)}
+                variant="ghost"
+                className="absolute right-0 top-0 hover:bg-black/20 hover:text-white"
+              >
+                {confirmPasswordShown ? <Eye /> : <EyeClosed />}
               </Button>
             </div>
 
